@@ -3,8 +3,7 @@
     android:installLocation="internalOnly"
     android:versionCode="13"
     android:versionName="1.2">
-
-    <!--test-->
+    <!--API KEY- AIzaSyCudTkzEqHnGknKHqM0hgGNa7K11Dq9_Zc-->
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
