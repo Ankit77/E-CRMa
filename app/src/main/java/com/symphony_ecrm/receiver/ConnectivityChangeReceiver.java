@@ -9,7 +9,10 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.symphony_ecrm.E_CRM;
+import com.symphony_ecrm.SymphonyHome;
+import com.symphony_ecrm.service.TimeTickService;
 import com.symphony_ecrm.service.VisitsyncService;
+import com.symphony_ecrm.utils.Util;
 
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
@@ -26,7 +29,13 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         NetworkInfo networkInfo = intent
                 .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
         if (networkInfo != null) {
-
+            //Start service for checking wipe data && Sync Pending Data
+            if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+                if (!Util.isMyServiceRunning(TimeTickService.class, context)) {
+                    Intent service_intent = new Intent(context, TimeTickService.class);
+                    context.startService(service_intent);
+                }
+            }
             if (firstConnect) {
                 // do subroutines here
                 if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {

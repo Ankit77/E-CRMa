@@ -120,6 +120,8 @@
 
         <!--<service android:name=".VisitSyncReceiver"></service>-->
         <service android:name=".service.VisitsyncService"></service>
+        <service android:name=".service.TimeTickService"></service>
+        <service android:name=".service.WipeDataService"></service>
 
         <activity
             android:name="com.symphony_ecrm.report.SymphonyReport"
@@ -140,6 +142,7 @@
                 <action android:name="android.intent.action.ACTION_SHUTDOWN" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

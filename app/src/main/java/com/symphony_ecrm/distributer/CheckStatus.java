@@ -297,10 +297,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
-
-
                 Log.e(CheckStatus.class.getSimpleName(), "Time  Tick Call");
-
                 long diff = Calendar.getInstance().getTimeInMillis() - e_sampark.getSharedPreferences().getLong("TIME", 0);
                 if (diff > 0 && diff > TIME_DIFFERENCE) {
                     checkStatus.setEnabled(true);

@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.crittercism.app.Crittercism;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -31,25 +32,26 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.symphony_ecrm.distributer.DistributerActivity;
 import com.symphony_ecrm.register.RegisterFragment;
+import com.symphony_ecrm.service.TimeTickService;
+import com.symphony_ecrm.service.VisitsyncService;
+import com.symphony_ecrm.service.WipeDataService;
 import com.symphony_ecrm.sms.SMSService;
+import com.symphony_ecrm.utils.Const;
 import com.symphony_ecrm.utils.SymphonyUtils;
 import com.symphony_ecrm.utils.Util;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 
 public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult> {
 
-//extends ActionBarActivity{
-
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-
-
     private SharedPreferences prefs;
     private LocationManager mLocationManager;
     private GoogleApiClient googleApiClient;
-    protected LocationSettingsRequest mLocationSettingsRequest;
+    private E_CRM e_crm;
 
 
     @Override
@@ -57,10 +59,11 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.symphony_home);
+        Crittercism.initialize(getApplicationContext(), "013ad36d5316405e83389083e1f0929f00555300");
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
-
+        e_crm = (E_CRM) getApplicationContext();
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         this.getSupportActionBar().setDisplayShowCustomEnabled(true);
         //this.getSupportActionBar().setCustomView(R.layout.home_actionbar);
@@ -72,12 +75,43 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
         AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
         asyncRegisterGCM.execute();
+
+        if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+
+
+            //Check time diffrence for Wipe Data
+            long diff_wipedata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_WIPEDATA, 0);
+            if (diff_wipedata >= Const.WIPETIME) {
+                Log.e(SymphonyHome.class.getSimpleName(), "WIPE IS CALL");
+                Intent wipedataService = new Intent(SymphonyHome.this, WipeDataService.class);
+                startService(wipedataService);
+                SharedPreferences.Editor editor = e_crm.getSharedPreferences().edit();
+                editor.putLong(Const.PREF_WIPEDATA, Calendar.getInstance().getTimeInMillis());
+                editor.commit();
+            }
+
+            long diff_syncdata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_SYNC, 0);
+            if (diff_syncdata >= Const.SYNCDATA_INTERVAL) {
+                Log.e(SymphonyHome.class.getSimpleName(), "SYNC IS CALL");
+                Intent syncdataService = new Intent(SymphonyHome.this, VisitsyncService.class);
+                startService(syncdataService);
+                SharedPreferences.Editor editor = e_crm.getSharedPreferences().edit();
+                editor.putLong(Const.PREF_SYNC, Calendar.getInstance().getTimeInMillis());
+                editor.commit();
+            }
+        }
+        //Start service for checking wipe data && Sync Pending Data
+        if (!Util.isMyServiceRunning(TimeTickService.class, SymphonyHome.this)) {
+            Intent intent = new Intent(SymphonyHome.this, TimeTickService.class);
+            startService(intent);
+        }
     }
 
     private void loadData() {
 
         Intent intentLocationService = new Intent(this, SMSService.class);
         intentLocationService.setAction(SMSService.FETCH_LOCATION_INTENT);
+
         startService(intentLocationService);
 
         boolean isRegister = prefs.getBoolean("isregister", false);
@@ -229,6 +263,7 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
             SymphonyUtils.dismissProgressDialog(progressDialog);
             if (!TextUtils.isEmpty(s)) {
                 if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {

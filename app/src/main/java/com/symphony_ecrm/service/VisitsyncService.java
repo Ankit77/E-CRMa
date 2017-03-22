@@ -64,7 +64,7 @@ public class VisitsyncService extends Service {
 
     }
 
-    private void sendVisit(CRMModel crmModel) {
+    private synchronized void sendVisit(CRMModel crmModel) {
         Log.e(VisitsyncService.class.getSimpleName(), "VISI SYNC CALL");
 
         if (Util.isNetworkAvailable(VisitsyncService.this)) {

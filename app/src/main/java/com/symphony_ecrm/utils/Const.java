@@ -24,10 +24,10 @@ public class Const {
     public static final String DATETIMEFORMAT = "yyyy-MM-dd hh:mm:ss a";
     public static final String VISIT_DATETIMEFORMAT = "yyyy-dd-MM";
 
-    public static final String PREF_STRAT_TIME = "PREF_STRAT_TIME";
+//    public static final String PREF_STRAT_TIME = "PREF_STRAT_TIME";
     public static final long WIPETIME = 1000 * 60 * 60 * 48;
-    //    public static final long WIPETIME = 1000 * 60 * 2;
-    public static final long SYNCDATA_INTERVAL = 1000 * 60 * 1;
+    //public static final long WIPETIME = 1000 * 60 * 2;
+    public static final long SYNCDATA_INTERVAL = 1000 * 60 * 2;
 
     public static final String BUCKET = "gs://e-crm-1360.appspot.com";
     public static final String FOLDER_NAME = "IMAGE";
@@ -38,5 +38,7 @@ public class Const {
     public static final String KEY_CRMACTID = "CRMACTID";
     public static final String TYPE_NORMAL = "NORMAL";
     public static final String TYPE_VISIT = "VISIT";
+    public static final String PREF_WIPEDATA = "WIPEDATA";
+    public static final String PREF_SYNC = "SYNC";
 
 }
