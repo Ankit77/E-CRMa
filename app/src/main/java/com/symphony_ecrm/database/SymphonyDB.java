@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
-import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 
 import com.symphony_ecrm.model.CRMModel;
@@ -53,9 +51,11 @@ public class SymphonyDB extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqldb, int arg1, int arg2) {
+    public void onUpgrade(SQLiteDatabase sqldb, int newversion, int oldversion) {
         // TODO Auto-generated method stub
-
+        if (newversion > oldversion) {
+            sqldb.execSQL("ALTER TABLE " + DB.CRM_CHECKINFO + " ADD COLUMN " + DB.CRM_CHECKINFO_REFERENCEID + " TEXT");
+        }
         onCreate(sqldb);
 
     }

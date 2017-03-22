@@ -13,9 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -230,7 +228,7 @@ public class SymphonyGCMService extends Service {
         Notification.Builder notificationBuilder;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder = new Notification.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_launcher)
                     .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(false).setOngoing(true)
                     .setContentText(message);
             if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
@@ -238,7 +236,7 @@ public class SymphonyGCMService extends Service {
             }
         } else {
             notificationBuilder = new Notification.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_launcher)
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setCategory(Notification.CATEGORY_MESSAGE)
                     .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(false).setOngoing(true)
