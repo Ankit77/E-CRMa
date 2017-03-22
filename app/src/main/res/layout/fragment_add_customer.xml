@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/contactname"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edtcontactname"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:imeOptions="actionNext"
+            android:padding="10dip"
+            android:singleLine="true"
+            android:textColor="@color/edit_text_color_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/name"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edt_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:imeOptions="actionNext"
+            android:padding="10dip"
+            android:singleLine="true"
+            android:textColor="@color/edit_text_color_blue" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/detail"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edt_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:gravity="left"
+            android:imeOptions="actionNext"
+            android:lines="3"
+            android:maxLines="3"
+            android:padding="10dip"
+            android:textColor="@color/edit_text_color_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/town"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <AutoCompleteTextView
+            android:id="@+id/fragment_add_costomer_ettown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:ems="10"
+            android:gravity="left"
+            android:imeOptions="actionNext"
+            android:padding="10dip">
+
+            <requestFocus />
+        </AutoCompleteTextView>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/designation"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edtdesignation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:imeOptions="actionNext"
+            android:padding="10dip"
+            android:singleLine="true"
+            android:textColor="@color/edit_text_color_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/mobile"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edtMobile"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:padding="10dip"
+            android:singleLine="true"
+            android:textColor="@color/edit_text_color_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/email"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edtemail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:padding="10dip"
+            android:singleLine="true"
+            android:textColor="@color/edit_text_color_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_text_bottom_margin"
+            android:layout_marginTop="@dimen/register_text_top_margin"
+            android:text="@string/pincode"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="@dimen/register_textview_size" />
+
+        <EditText
+            android:id="@+id/fragment_add_customer_edtPincoe"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/register_edit_bottom_margin"
+            android:layout_marginTop="@dimen/register_edit_top_margin"
+            android:background="#c6e9f9"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:padding="10dip"
+            android:singleLine="true"
+            android:textColor="@color/edit_text_color_blue" />
+
+
+        <Button
+            android:id="@+id/fragment_add_customer_btn_submit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/register_button_top_margin"
+            android:background="@drawable/button_border"
+            android:gravity="center"
+            android:shadowColor="@color/text_white"
+            android:shadowDx="-1"
+            android:shadowDy="1"
+            android:shadowRadius="0.04"
+            android:text="@string/submit"
+            android:textColor="@color/text_blue"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+</ScrollView>

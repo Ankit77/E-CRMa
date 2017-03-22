@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="key_cacsvisitid">CACSVISITID</string>
+    <string name="key_crmactid">CRMACTID</string>
+    <string name="key_notificationtype">notificationtype</string>
+</resources>

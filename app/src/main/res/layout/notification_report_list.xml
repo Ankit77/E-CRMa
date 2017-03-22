@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/notificationReportList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dip" />
+
+    <TextView
+        android:id="@+id/emptyViewNotification"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:gravity="center"
+        android:shadowColor="@color/text_white"
+        android:shadowDy="1"
+        android:shadowRadius="0.04"
+        android:text="NO RECORDS FOUND"
+        android:textColor="@color/bg_blue"
+        android:textSize="22dip"
+        android:textStyle="bold" />
+</LinearLayout>

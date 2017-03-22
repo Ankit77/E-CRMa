@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "915617718405",
+    "firebase_url": "https://e-crm-1360.firebaseio.com",
+    "project_id": "e-crm-1360",
+    "storage_bucket": "e-crm-1360.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915617718405:android:eaf5f1dff464f9bc",
+        "android_client_info": {
+          "package_name": "com.symphony_ecrm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915617718405-udqkg8o0ae6479c8ln9f2hscauhjs9e7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEzLLqIKPVE31uMcH8Qaezlwfe5-qxxOs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

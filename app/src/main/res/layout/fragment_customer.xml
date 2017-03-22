@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ListView
+        android:id="@+id/fragment_customer_lvCusList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"></ListView>
+
+    <TextView
+        android:id="@+id/fragment_customer_tvempty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:checked="true"
+        android:gravity="center"
+        android:shadowColor="@color/text_white"
+        android:shadowDy="1"
+        android:shadowRadius="0.04"
+        android:textColor="@color/bg_blue"
+        android:textSize="22dip"
+        android:textStyle="bold"
+        android:visibility="gone"
+
+
+        />
+
+
+</LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:com.symphony_ecrm="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/list"
+        android:icon="@drawable/list"
+        android:title="Setting"
+        com.symphony_ecrm:showAsAction="always" />
+
+    <item
+        android:id="@+id/exit"
+        android:icon="@drawable/logout"
+        android:title="Logout"
+        com.symphony_ecrm:showAsAction="always" />
+
+
+</menu>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <View
+        android:layout_width="5dip"
+        android:layout_height="fill_parent"
+        android:background="@drawable/highlight_list_item" />
+
+    <RelativeLayout
+        android:id="@+id/row_fragment_customerlist_rlmain"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/list_item_border"
+        android:orientation="vertical"
+        android:padding="10dip">
+
+        <TextView
+            android:id="@+id/row_fragment_customerlist_tvCusName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:text="sssds"
+            android:textColor="@color/text_white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/row_fragment_customerlist_tvCustaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/row_fragment_customerlist_tvCusName"
+            android:text="ddfdd"
+            android:textColor="@color/text_white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/row_fragment_customerlist_tvcontact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/row_fragment_customerlist_tvCustaddress"
+            android:text="fdfdfd"
+            android:textColor="@color/text_white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/row_fragment_customerlist_tvCustown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/row_fragment_customerlist_tvcontact"
+            android:text="ssdfdf"
+            android:textColor="@color/text_white"
+            android:textIsSelectable="true"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+</LinearLayout>
