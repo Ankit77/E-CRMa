@@ -117,7 +117,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
                         cacsId = intent.getExtras().get(Const.KEY_CACSVISITID).toString();
                         crmActId = intent.getExtras().get(Const.KEY_CRMACTID).toString();
                         if (homeFragment != null) {
-                            homeFragment.showNextActionDateDiglog(cacsId, crmActId);
+                            homeFragment.showNextActionDateDialog(cacsId, crmActId);
                         }
                     }
                 }

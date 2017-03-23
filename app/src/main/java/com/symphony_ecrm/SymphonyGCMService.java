@@ -229,7 +229,7 @@ public class SymphonyGCMService extends Service {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder = new Notification.Builder(this)
                     .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(false).setOngoing(true)
+                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
                     .setContentText(message);
             if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
                 notificationBuilder.setOngoing(false).setAutoCancel(true);
@@ -239,7 +239,7 @@ public class SymphonyGCMService extends Service {
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setCategory(Notification.CATEGORY_MESSAGE)
-                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(false).setOngoing(true)
+                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
                     .setContentText(message);
             if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
                 notificationBuilder.setOngoing(false).setAutoCancel(true);

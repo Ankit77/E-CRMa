@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.symphony_ecrm.E_CRM;
@@ -319,6 +321,7 @@ public class HomeFragment extends Fragment {
                             } else {
                                 showAlertDialog(getActivity(), getString(R.string.alert_checkout_first), true);
                             }
+                            dialog.dismiss();
                         } else if (which == 1) {
                             showPostposndVisitDailog(cacsvisitId, crmActID);
                         }
@@ -330,7 +333,76 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
+    /**
+     * Display Dialog for Postposne visit
+     *
+     * @param cacsvisitId
+     * @param crmActID
+     */
+    public void showNextActionDateDialog(final String cacsvisitId, final String crmActID) {
+//        // custom dialog
+        final Dialog dialog = new Dialog(getActivity());
 
+        dialog.setContentView(R.layout.dialog_nextaction);
+
+        // set the custom dialog components - text, image and button
+        final RadioGroup rgOption = (RadioGroup) dialog.findViewById(R.id.dialog_nextaction_rgoption);
+        RadioButton rbOption = null;
+
+        Button btnSubmit = (Button) dialog.findViewById(R.id.dialog_nextaction_btnSubmit);
+        // if button is clicked, close the custom dialog
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int selectedId = rgOption.getCheckedRadioButtonId();
+                RadioButton rbOption = (RadioButton) dialog.findViewById(selectedId);
+                if (rbOption != null) {
+
+                    if (selectedId == R.id.dialog_nextaction_rbconvertcall) {
+                        if ((e_sampark.getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
+                            CheckStatus checkStatus = new CheckStatus();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("CUSID", crmActID);
+                            bundle.putString("VISITREFERENCEID", cacsvisitId);
+                            e_sampark.getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
+                            checkStatus.setArguments(bundle);
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.distHome, checkStatus, CheckStatus.class.getSimpleName()).hide(HomeFragment.this)
+                                    .addToBackStack(null).commit();
+                        } else {
+                            showAlertDialog(getActivity(), getString(R.string.alert_checkout_first), true);
+                        }
+                        dialog.dismiss();
+                    } else if (selectedId == R.id.dialog_nextaction_rbpostpone) {
+                        showPostposndVisitDailog(cacsvisitId, crmActID);
+                        dialog.dismiss();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Please select option", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+//This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    /**
+     * Display Dialog for Postposne visit
+     *
+     * @param cacsvisitId
+     * @param crmActID
+     */
     private void showPostposndVisitDailog(final String cacsvisitId, final String crmActID) {
 //        // custom dialog
         final Dialog dialog = new Dialog(getActivity());
@@ -348,8 +420,10 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(etDatetime.getText().toString())) {
                     if (Util.isNetworkAvailable(getActivity())) {
+                        SimpleDateFormat timeStampFormat = new SimpleDateFormat(Const.POSTPONE_DATETIMEFORMAT_API);
+                        String timeStamp = timeStampFormat.format(calendar.getTimeInMillis());
                         AsyncPostponeVisit asyncPostponeVisit = new AsyncPostponeVisit();
-                        asyncPostponeVisit.execute(cacsvisitId, crmActID, etDatetime.getText().toString());
+                        asyncPostponeVisit.execute(cacsvisitId, crmActID, timeStamp);
                         dialog.dismiss();
                     } else {
                         Util.showAlertDialog(getActivity(), "Please Check Internet Connection");

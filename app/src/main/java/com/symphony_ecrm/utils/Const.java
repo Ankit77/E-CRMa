@@ -22,7 +22,8 @@ public class Const {
     public static final String PREF_COMPLETE_VISIT = "PREF_COMPLETE_VISIT";
     public static final String PREF_ISSYNCDATA = "PREF_ISSYNC";
     public static final String DATETIMEFORMAT = "yyyy-MM-dd hh:mm:ss a";
-    public static final String VISIT_DATETIMEFORMAT = "yyyy-dd-MM";
+    public static final String VISIT_DATETIMEFORMAT = "dd-MMM-yyyy";
+    public static final String POSTPONE_DATETIMEFORMAT_API = "yyyy-dd-MM";
 
     //    public static final String PREF_STRAT_TIME = "PREF_STRAT_TIME";
     //public static final long WIPETIME = 1000 * 60 * 60 * 48;
@@ -32,7 +33,7 @@ public class Const {
     public static final String BUCKET = "gs://e-crm-1360.appspot.com";
     public static final String FOLDER_NAME = "IMAGE";
 
-
+    public static final String KEY_NOTIFICATIONID = "NOTIFICATIONID";
     public static final String KEY_NOTIFICATIONTYPE = "NOTIFICATIONTYPE";
     public static final String KEY_CACSVISITID = "CACSVISITID";
     public static final String KEY_CRMACTID = "CRMACTID";
