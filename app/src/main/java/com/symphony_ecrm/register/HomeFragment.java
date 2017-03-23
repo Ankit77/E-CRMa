@@ -342,7 +342,7 @@ public class HomeFragment extends Fragment {
     public void showNextActionDateDialog(final String cacsvisitId, final String crmActID) {
 //        // custom dialog
         final Dialog dialog = new Dialog(getActivity());
-
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_nextaction);
 
         // set the custom dialog components - text, image and button
@@ -406,7 +406,7 @@ public class HomeFragment extends Fragment {
     private void showPostposndVisitDailog(final String cacsvisitId, final String crmActID) {
 //        // custom dialog
         final Dialog dialog = new Dialog(getActivity());
-
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_postponevisit);
 
         // set the custom dialog components - text, image and button

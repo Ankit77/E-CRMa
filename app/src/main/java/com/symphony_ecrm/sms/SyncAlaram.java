@@ -100,11 +100,8 @@ public class SyncAlaram extends BroadcastReceiver {
                         .delete(Uri.parse("content://com.symphony_ecrm.database.DBProvider/deleteCheckReport"),
                                 null,
                                 null);
-                int delNotificationReport = context.getContentResolver()
-                        .delete(Uri.parse("content://com.symphony_ecrm.database.DBProvider/deleteNotificationReport"),
-                                null,
-                                null);
-                Log.e("Symphony ", "Wipe out all data " + delDistributerReport + " " + delCheckReport + " " + delNotificationReport);
+
+                Log.e("Symphony ", "Wipe out all data " + delDistributerReport + " " + delCheckReport);
                 SymphonyUtils.cancelAlarm(context);
                 SymphonyUtils.startWipeDataAlram(context);
             }
