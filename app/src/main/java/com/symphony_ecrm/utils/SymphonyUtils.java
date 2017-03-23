@@ -25,13 +25,9 @@ import java.util.Date;
 public class SymphonyUtils {
 
     public static final String TIME_SERVER = "time-a.nist.gov";
-    public static final String GCM_KEY = "915617718405";
+    public static final String GCM_KEY = "430098454285";
     public static final String MESSAGE_KEY = "message";
-    public static final String NOTIFICACTIONTYPE_KEY = "type";
-    public static final String CACSVISITID_KEY = "cacsvisitid";
-    public static final String CRMACTID_KEY = "crmactid";
     public static final String NORMAL = "normal";
-    public static final String VISIT = "visit";
 
     private static SharedPreferences prefs;
     private static SharedPreferences.Editor edit;

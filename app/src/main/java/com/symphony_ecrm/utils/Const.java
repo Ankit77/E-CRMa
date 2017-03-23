@@ -30,7 +30,7 @@ public class Const {
     public static final long WIPETIME = 1000 * 60 * 15;
     public static final long SYNCDATA_INTERVAL = 1000 * 60 * 2;
 
-    public static final String BUCKET = "gs://e-crm-1360.appspot.com";
+    public static final String BUCKET = "gs://e-crm-162417.appspot.com";
     public static final String FOLDER_NAME = "IMAGE";
 
     public static final String KEY_NOTIFICATIONID = "NOTIFICATIONID";
