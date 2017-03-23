@@ -340,7 +340,7 @@ public class SymphonyDB extends SQLiteOpenHelper {
         }
         Cursor cursor = null;
         try {
-            String query = "Select * from " + DB.CRM_CHECKINFO + " where " + DB.CRM_CHECKINFO_CHECKFLAG + " = 1";
+            String query = "Select * from " + DB.CRM_CHECKINFO + " where " + DB.CRM_CHECKINFO_CHECKSTATUS + " = 1";
             cursor = sqLiteDatabase.rawQuery(query, null);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
@@ -778,9 +778,11 @@ public class SymphonyDB extends SQLiteOpenHelper {
                 mCursor.moveToFirst();
                 id = mCursor.getInt(mCursor.getColumnIndex("_id"));
             }
+            mCursor.close();
         } catch (Exception e) {
             e.printStackTrace();
             id = -1;
+
 
         } finally {
             sqLiteDatabase.close();

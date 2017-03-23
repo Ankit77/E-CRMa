@@ -372,7 +372,7 @@ public class HomeFragment extends Fragment {
         lp.copyFrom(window.getAttributes());
 //This makes the dialog take up the full width
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = 600;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);

@@ -9,23 +9,18 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.symphony_ecrm.E_CRM;
-import com.symphony_ecrm.SymphonyHome;
 import com.symphony_ecrm.service.TimeTickService;
 import com.symphony_ecrm.service.VisitsyncService;
 import com.symphony_ecrm.utils.Util;
 
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
-    private E_CRM e_crm;
-    private static final String HTTP_SERVER = "61.12.85.74";
-    private static final String HTTP_PORT = "800";
     private static final String HTTP_PROTOCOL = "http://";
-    private String HTTP_ENDPOINT = HTTP_PROTOCOL + HTTP_SERVER + ":" + HTTP_PORT;
-    private static boolean firstConnect = true;
+    private E_CRM e_crm;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        e_crm = (E_CRM) context.getApplicationContext();
         NetworkInfo networkInfo = intent
                 .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
         if (networkInfo != null) {
@@ -36,7 +31,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
                     context.startService(service_intent);
                 }
             }
-            if (firstConnect) {
+
                 // do subroutines here
                 if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
 
@@ -51,10 +46,8 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
                         Log.e(ConnectivityChangeReceiver.class.getSimpleName(), "disconnect");
                     }
                 }
-                firstConnect = false;
-            } else {
-                firstConnect = true;
-            }
+
+
 
         }
 

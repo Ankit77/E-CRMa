@@ -121,7 +121,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
                         }
                     }
                 }
-            }, 2000);
+            }, 1000);
 
         }
     }

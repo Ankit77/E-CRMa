@@ -400,63 +400,66 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
                 // Create a storage reference from our app
 //                For CheckIn
                 showProgressDailog();
-                StorageReference storageRef_checkin = storage.getReferenceFromUrl(Const.BUCKET);
-                Uri file = Uri.fromFile(new File(m_crmModel.getCheckInImagePath()));
-                StorageReference riversRef_checkin = storageRef_checkin.child(Const.FOLDER_NAME + "/" + file.getLastPathSegment());
-                UploadTask uploadTask = riversRef_checkin.putFile(file);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        updateData(true);
-                        exception.printStackTrace();
-                        if (progress != null && progress.isShowing()) {
-                            progress.dismiss();
+                if (new File(m_crmModel.getCheckInImagePath()).exists() && new File(checkOutImage).exists()) {
+                    StorageReference storageRef_checkin = storage.getReferenceFromUrl(Const.BUCKET);
+                    Uri file = Uri.fromFile(new File(m_crmModel.getCheckInImagePath()));
+                    StorageReference riversRef_checkin = storageRef_checkin.child(Const.FOLDER_NAME + "/" + file.getLastPathSegment());
+                    UploadTask uploadTask = riversRef_checkin.putFile(file);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            updateData(true);
+                            exception.printStackTrace();
+                            if (progress != null && progress.isShowing()) {
+                                progress.dismiss();
+                            }
+                            dismiss();
                         }
-                        dismiss();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        checkinUrl = downloadUrl.toString();
-                        StorageReference storageRef_checkout = storage.getReferenceFromUrl(Const.BUCKET);
-                        Uri file = Uri.fromFile(new File(checkOutImage));
-                        StorageReference riversRef_checkout = storageRef_checkout.child(Const.FOLDER_NAME + "/" + file.getLastPathSegment());
-                        final UploadTask uploadTask = riversRef_checkout.putFile(file);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                updateData(true);
-                                exception.printStackTrace();
-                                if (progress != null && progress.isShowing()) {
-                                    progress.dismiss();
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            checkinUrl = downloadUrl.toString();
+                            StorageReference storageRef_checkout = storage.getReferenceFromUrl(Const.BUCKET);
+                            Uri file = Uri.fromFile(new File(checkOutImage));
+                            StorageReference riversRef_checkout = storageRef_checkout.child(Const.FOLDER_NAME + "/" + file.getLastPathSegment());
+                            final UploadTask uploadTask = riversRef_checkout.putFile(file);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle unsuccessful uploads
+                                    updateData(true);
+                                    exception.printStackTrace();
+                                    if (progress != null && progress.isShowing()) {
+                                        progress.dismiss();
+                                    }
+                                    dismiss();
                                 }
-                                dismiss();
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                checkouturl = downloadUrl.toString();
-                                m_crmModel.setCheckInImagePath(checkinUrl);
-                                m_crmModel.setCheckOutImagePath(checkouturl);
-                                if (progress != null && progress.isShowing()) {
-                                    progress.dismiss();
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    checkouturl = downloadUrl.toString();
+                                    m_crmModel.setCheckInImagePath(checkinUrl);
+                                    m_crmModel.setCheckOutImagePath(checkouturl);
+                                    if (progress != null && progress.isShowing()) {
+                                        progress.dismiss();
+                                    }
+                                    AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
+                                    asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
+
                                 }
-                                AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
-//                asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, m_crmModel.getCheckInImagePath(), m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkOutImage, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString());
-                                asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
+                            });
 
-                            }
-                        });
-
-                    }
-                });
-
+                        }
+                    });
+                } else {
+                    AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
+                    asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
+                }
 
 //                AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
 ////                asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, m_crmModel.getCheckInImagePath(), m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkOutImage, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString());

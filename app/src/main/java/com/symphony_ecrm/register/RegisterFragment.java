@@ -63,24 +63,6 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        
-        
-       /* settingsBtn = (Button) getActivity().findViewById(R.id.settingsBtn);
-        settingsBtn.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(getActivity(),SymphonySettings.class);
-				startActivity(intent);
-				
-			}
-        	
-        	
-        	
-        	 
-        });*/
-
 
         if (mProgressBar != null) {
             mProgressBar = null;

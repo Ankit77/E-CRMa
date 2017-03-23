@@ -64,26 +64,11 @@ public class VisitsyncService extends Service {
 
     }
 
-    private synchronized void sendVisit(CRMModel crmModel) {
+    private synchronized void sendVisit(final CRMModel crmModel) {
         Log.e(VisitsyncService.class.getSimpleName(), "VISI SYNC CALL");
 
+
         if (Util.isNetworkAvailable(VisitsyncService.this)) {
-            AsyncSendVisit asyncSendVisit = new AsyncSendVisit(crmModel);
-            asyncSendVisit.execute(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
-//                    boolean issuccess = wsVisit.executeAddCustomer(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitSyncReceiver.this));
-        }
-    }
-
-    private class AsyncSendVisit extends AsyncTask<String, Void, Boolean> {
-        private CRMModel crmModel;
-        private boolean issuccess;
-
-        public AsyncSendVisit(CRMModel mCrmModel) {
-            crmModel = mCrmModel;
-        }
-
-        @Override
-        protected Boolean doInBackground(final String... params) {
 
             File file_checkin = new File(crmModel.getCheckInImagePath());
             if (file_checkin.exists()) {
@@ -128,18 +113,36 @@ public class VisitsyncService extends Service {
                                 crmModel.setCheckInImagePath(checkinUrl);
                                 crmModel.setCheckOutImagePath(checkouturl);
 
-                                WSVisit wsVisit = new WSVisit();
-                                issuccess = wsVisit.executeAddCustomer(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14], params[15], params[16], params[17], params[18], params[19]);
+                                AsyncSendVisit asyncSendVisit = new AsyncSendVisit(crmModel);
+                                asyncSendVisit.execute(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), checkinUrl, crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), checkouturl, crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
 
                             }
                         });
                     }
                 });
+
+//            AsyncSendVisit asyncSendVisit = new AsyncSendVisit(crmModel);
+//            asyncSendVisit.execute(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
+//                    boolean issuccess = wsVisit.executeAddCustomer(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitSyncReceiver.this));
             } else {
-//            HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this));
-                WSVisit wsVisit = new WSVisit();
-                issuccess = wsVisit.executeAddCustomer(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14], params[15], params[16], params[17], params[18], params[19]);
+                AsyncSendVisit asyncSendVisit = new AsyncSendVisit(crmModel);
+                asyncSendVisit.execute(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
             }
+        }
+    }
+
+    private class AsyncSendVisit extends AsyncTask<String, Void, Boolean> {
+        private CRMModel crmModel;
+        private boolean issuccess;
+
+        public AsyncSendVisit(CRMModel mCrmModel) {
+            crmModel = mCrmModel;
+        }
+
+        @Override
+        protected Boolean doInBackground(final String... params) {
+            WSVisit wsVisit = new WSVisit();
+            issuccess = wsVisit.executeAddCustomer(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], params[10], params[11], params[12], params[13], params[14], params[15], params[16], params[17], params[18], params[19]);
             return issuccess;
         }
 
