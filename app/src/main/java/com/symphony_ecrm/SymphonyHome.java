@@ -77,8 +77,6 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         asyncRegisterGCM.execute();
 
         if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
-
-
             //Check time diffrence for Wipe Data
             long diff_wipedata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_WIPEDATA, 0);
             if (diff_wipedata >= Const.WIPETIME) {

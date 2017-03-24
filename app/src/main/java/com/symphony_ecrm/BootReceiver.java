@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.symphony_ecrm.service.TimeTickService;
 import com.symphony_ecrm.service.VisitsyncService;
 import com.symphony_ecrm.sms.SMSService;
 import com.symphony_ecrm.utils.Const;
 import com.symphony_ecrm.utils.SymphonyUtils;
+import com.symphony_ecrm.utils.Util;
 
 import java.util.Calendar;
 
@@ -36,7 +38,12 @@ public class BootReceiver extends BroadcastReceiver {
             SymphonyUtils.startWipeDataAlram(context);
             startLocationService();
             e_crm.getSharedPreferences().edit().putBoolean(Const.PREF_ISSYNCDATA, true).commit();
-            setSyncCheckStatusAlarm(context);
+            if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+                if (!Util.isMyServiceRunning(TimeTickService.class, context)) {
+                    Intent service_intent = new Intent(context, TimeTickService.class);
+                    context.startService(service_intent);
+                }
+            }
         }
     }
 
@@ -51,14 +58,14 @@ public class BootReceiver extends BroadcastReceiver {
     /**
      * Set alarm for sync pending visit to server
      */
-    private void setSyncCheckStatusAlarm(Context context) {
-        Calendar calendar = Calendar.getInstance();
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent alramReceiverIntent = new Intent(context, VisitsyncService.class);
-        PendingIntent alramPendingIntent = PendingIntent.getBroadcast(context, 0, alramReceiverIntent, 0);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                Const.SYNCDATA_INTERVAL, alramPendingIntent);
-    }
+//    private void setSyncCheckStatusAlarm(Context context) {
+//        Calendar calendar = Calendar.getInstance();
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        Intent alramReceiverIntent = new Intent(context, VisitsyncService.class);
+//        PendingIntent alramPendingIntent = PendingIntent.getBroadcast(context, 0, alramReceiverIntent, 0);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+//                calendar.getTimeInMillis(),
+//                Const.SYNCDATA_INTERVAL, alramPendingIntent);
+//    }
 
 }

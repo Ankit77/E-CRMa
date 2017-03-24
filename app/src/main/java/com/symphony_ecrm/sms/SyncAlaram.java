@@ -30,7 +30,6 @@ public class SyncAlaram extends BroadcastReceiver {
         prefs = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
         e_crm = (E_CRM) context.getApplicationContext();
         if (intent != null) {
-
             if (intent.getAction().equals(DB_CHECK_FOR_DIST_PHOTO)) {
                 Cursor cur = context.getContentResolver().
                         query(Uri.parse("content://com.symphony_ecrm.database.DBProvider/getDistributerMetaData"),
@@ -47,63 +46,40 @@ public class SyncAlaram extends BroadcastReceiver {
                 Intent intentLocationService = new Intent(context, SMSService.class);
                 intentLocationService.setAction(SMSService.FETCH_LOCATION_INTENT);
                 context.startService(intentLocationService);
-
                 if (cur != null) {
-
                     if (cur.getCount() != 0) {
-
                         //start service
-
                         if (isNetworkAvailable(context)) {
-
                             Intent syncManager = new Intent(context, SyncManager.class);
                             syncManager.setAction(SyncManager.SYNC_DISTRIBUTER_DATA);
                             context.startService(syncManager);
                         }
-
                     }
-
                     cur.close();
                 }
-
                 if (curCheck != null) {
-
                     if (curCheck.getCount() != 0) {
-
-
                         if (isNetworkAvailable(context)) {
-
                             Intent syncManager = new Intent(context, SyncManager.class);
                             syncManager.setAction(SyncManager.SYNC_CHECK_STATUS_DATA);
                             context.startService(syncManager);
                         }
-
-
                     }
                     curCheck.close();
-
                 }
-
-
             } else if (intent.getAction().equals(WIPE_REPORT_DATA)) {
-
-
                 //sendNotification("Wipe out all data");
-
                 int delDistributerReport = context.getContentResolver()
                         .delete(Uri.parse("content://com.symphony_ecrm.database.DBProvider/deleteDistributerReport"),
                                 null,
                                 null);
-
-
                 int delCheckReport = context.getContentResolver()
                         .delete(Uri.parse("content://com.symphony_ecrm.database.DBProvider/deleteCheckReport"),
                                 null,
                                 null);
-
                 Log.e("Symphony ", "Wipe out all data " + delDistributerReport + " " + delCheckReport);
-                SymphonyUtils.cancelAlarm(context);
-                SymphonyUtils.startWipeDataAlram(context);
+//                SymphonyUtils.cancelAlarm(context);
+//                SymphonyUtils.startWipeDataAlram(context);
             }
         }
     }
