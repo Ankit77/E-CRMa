@@ -38,6 +38,7 @@ import com.symphony_ecrm.http.WSNextAction;
 import com.symphony_ecrm.http.WSPostpondVisit;
 import com.symphony_ecrm.http.WSPurpose;
 import com.symphony_ecrm.http.WSTown;
+import com.symphony_ecrm.model.CustomerListModel;
 import com.symphony_ecrm.model.NextActionModel;
 import com.symphony_ecrm.model.PurposeModel;
 import com.symphony_ecrm.model.TownModel;
@@ -361,16 +362,21 @@ public class HomeFragment extends Fragment {
 
                     if (selectedId == R.id.dialog_nextaction_rbconvertcall) {
                         if ((e_sampark.getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
-                            CheckStatus checkStatus = new CheckStatus();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("CUSID", crmActID);
-                            bundle.putString("VISITREFERENCEID", cacsvisitId);
-                            e_sampark.getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
-                            checkStatus.setArguments(bundle);
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.distHome, checkStatus, CheckStatus.class.getSimpleName()).hide(HomeFragment.this)
-                                    .addToBackStack(null).commit();
+                            CustomerListModel customerListModel = e_sampark.getSymphonyDB().getCustomerInfo(crmActID);
+                            if (customerListModel != null) {
+                                CheckStatus checkStatus = new CheckStatus();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("CUSID", crmActID);
+                                bundle.putString("VISITREFERENCEID", cacsvisitId);
+                                e_sampark.getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
+                                checkStatus.setArguments(bundle);
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.distHome, checkStatus, CheckStatus.class.getSimpleName()).hide(HomeFragment.this)
+                                        .addToBackStack(null).commit();
+                            } else {
+                                showAlertDialog(getActivity(), getString(R.string.alert_no_record_id), false);
+                            }
                         } else {
                             showAlertDialog(getActivity(), getString(R.string.alert_checkout_first), true);
                         }

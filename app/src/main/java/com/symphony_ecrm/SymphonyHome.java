@@ -266,7 +266,7 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
 
             SymphonyUtils.dismissProgressDialog(progressDialog);
             if (!TextUtils.isEmpty(s)) {
-                if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     googleApiClient = new GoogleApiClient
                             .Builder(SymphonyHome.this)
                             .enableAutoManage(SymphonyHome.this, 34992, SymphonyHome.this)
