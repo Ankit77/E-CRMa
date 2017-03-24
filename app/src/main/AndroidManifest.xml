@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.symphony_ecrm"
     android:installLocation="internalOnly"
-    android:versionCode="13"
-    android:versionName="1.2">
+    android:versionCode="14"
+    android:versionName="1.3">
     <!--API KEY- AIzaSyCudTkzEqHnGknKHqM0hgGNa7K11Dq9_Zc-->
     <uses-sdk
         android:minSdkVersion="16"

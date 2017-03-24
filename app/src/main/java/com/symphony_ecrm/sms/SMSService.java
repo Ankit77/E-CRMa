@@ -83,7 +83,7 @@ public class SMSService extends Service implements LocationListener {
             } else {
                 mintent = intent;
                 mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (location != null) {
                     addressLatLng = location.getLatitude() + "," + location.getLongitude();
                     this.location = location;

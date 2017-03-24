@@ -33,6 +33,9 @@ import java.util.regex.Pattern;
 
 public class SymphonyGCMService extends Service {
 
+//    AIzaSyDSbfFtf-tm5VThCN_Os163RPPl4LAtY7k
+
+
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
@@ -101,8 +104,10 @@ public class SymphonyGCMService extends Service {
                                 } else {
                                     String cacsVisitID = extras.getString(Const.KEY_CACSVISITID);
                                     String crmActId = extras.getString(Const.KEY_CRMACTID);
-                                    sendVisitNotification(
-                                            message, cacsVisitID, crmActId);
+                                    if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
+                                        sendVisitNotification(
+                                                message, cacsVisitID, crmActId);
+                                    }
                                 }
                             }
                             Log.i(TAG, "Received: " + extras.toString());
@@ -200,6 +205,7 @@ public class SymphonyGCMService extends Service {
 
 
     public void sendVisitNotification(String msg, String cacsVisitID, String crmActId) {
+
         Random r = new Random();
         int i1 = r.nextInt(1000 - 1) + 1;
         //**add this line**
