@@ -43,6 +43,7 @@ dependencies {
     compile 'id.zelory:compressor:1.0.4'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.crittercism:crittercism-android-agent:+'
+    compile 'com.github.florent37:camerafragment:1.0.5'
 
 }
 apply plugin: 'com.google.gms.google-services'

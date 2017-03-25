@@ -15,7 +15,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.symphony_ecrm.E_CRM;
-import com.symphony_ecrm.VisitSyncReceiver;
 import com.symphony_ecrm.http.WSVisit;
 import com.symphony_ecrm.model.CRMModel;
 import com.symphony_ecrm.utils.Const;

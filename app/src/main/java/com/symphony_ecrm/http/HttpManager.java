@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.Xml;
 
@@ -96,12 +95,12 @@ public class HttpManager {
 
     private ArrayList<HttpStatusListener> httpStatusListener = new ArrayList<HttpStatusListener>();
     private ArrayList<OTPListener> otpListener = new ArrayList<OTPListener>();
-    private E_CRM e_sampark;
+    private E_CRM e_crm;
 
     public HttpManager(Context context) {
 
         this.context = context;
-        e_sampark = (E_CRM) context.getApplicationContext();
+        e_crm = (E_CRM) context.getApplicationContext();
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 1000 * 120);
@@ -987,7 +986,7 @@ public class HttpManager {
                 //Log.e("REGISTER USER OTP " , otp+"");
 
                 data.setMessage(message);
-                e_sampark.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
+                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
 
 
             } else if (name.equals("empid")) {
@@ -1054,7 +1053,7 @@ public class HttpManager {
                 //Log.e("REGISTER USER OTP " , otp+"");
 
                 data.setMessage(message);
-                e_sampark.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
+                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
 
 
             } else if (name.equals("empid")) {
@@ -1225,7 +1224,7 @@ public class HttpManager {
 
             } else if (name.equals("message")) {
                 String message = readmessage(parser);
-                e_sampark.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
+                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
             }
         }
         return issuccess;
@@ -1252,11 +1251,11 @@ public class HttpManager {
                     issuccess = false;
                 }
             } else if (name.equalsIgnoreCase("usertype")) {
-                e_sampark.getSharedPreferences().edit().putString(Const.USERTYPE, readusertype(parser)).commit();
+                e_crm.getSharedPreferences().edit().putString(Const.USERTYPE, readusertype(parser)).commit();
             } else if (name.equalsIgnoreCase("empid")) {
-                e_sampark.getSharedPreferences().edit().putString(Const.EMPID, readempId(parser)).commit();
+                e_crm.getSharedPreferences().edit().putString(Const.EMPID, readempId(parser)).commit();
             } else if (name.equalsIgnoreCase("message")) {
-                e_sampark.getSharedPreferences().edit().putString(Const.MESSAGE, readmessage(parser)).commit();
+                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, readmessage(parser)).commit();
             }
         }
         return issuccess;

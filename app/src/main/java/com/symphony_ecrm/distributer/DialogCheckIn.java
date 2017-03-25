@@ -58,7 +58,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
     private String HTTP_ENDPOINT = HTTP_PROTOCOL + HTTP_SERVER + ":" + HTTP_PORT;
     private Button btnSave;
     private Button btnSendToServer;
-    private E_CRM e_sampark;
+    private E_CRM e_crm;
     private ArrayList<PurposeModel> purposeList;
     private ArrayList<NextActionModel> nextActionList;
 
@@ -100,7 +100,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        e_sampark = (E_CRM) getActivity().getApplicationContext();
+        e_crm = (E_CRM) getActivity().getApplicationContext();
         storage = FirebaseStorage.getInstance();
         if (getArguments() != null) {
             visitType = getArguments().getString("TYPE");
@@ -175,7 +175,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
         tvNextActionDate.setOnClickListener(this);
         loadNextActionSpinner();
         loadPurposeSpinner();
-        customerListModel = e_sampark.getSymphonyDB().getCustomerInfo(custmerID);
+        customerListModel = e_crm.getSymphonyDB().getCustomerInfo(custmerID);
         if (customerListModel != null) {
             tvCompanyName.setText(customerListModel.getCustomername());
             tvLocation.setText(customerListModel.getTown());
@@ -243,7 +243,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                m_crmModel = e_sampark.getSymphonyDB().getVisit((int) e_sampark.getSharedPreferences().getLong("LASTROWID", 0));
+                m_crmModel = e_crm.getSymphonyDB().getVisit((int) e_crm.getSharedPreferences().getLong("LASTROWID", 0));
                 if (m_crmModel != null) {
                     custmerID = m_crmModel.getCusId();
                     tvCompanyName.setText(m_crmModel.getCompanyname());
@@ -351,8 +351,8 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
 
     private void checkIn() {
 
-        e_sampark.getSharedPreferences().edit().putString("TAG", Const.CHECKOUT).commit();
-        e_sampark.getSharedPreferences().edit().putBoolean(Const.PREF_COMPLETE_VISIT, false).commit();
+        e_crm.getSharedPreferences().edit().putString("TAG", Const.CHECKOUT).commit();
+        e_crm.getSharedPreferences().edit().putBoolean(Const.PREF_COMPLETE_VISIT, false).commit();
         CheckStatus checkStatus = (CheckStatus) getActivity().getSupportFragmentManager().findFragmentByTag(CheckStatus.class.getSimpleName());
         if (checkStatus != null) {
             checkStatus.changeButtonState();
@@ -379,16 +379,16 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
         crmModel.setCheckFlag(0);
         crmModel.setIsSendtoServer(0);
         crmModel.setIsCompleteVisit(0);
-        long id = e_sampark.getSymphonyDB().insertCRM(crmModel);
-        e_sampark.getSharedPreferences().edit().putLong("LASTROWID", id).commit();
+        long id = e_crm.getSymphonyDB().insertCRM(crmModel);
+        e_crm.getSharedPreferences().edit().putLong("LASTROWID", id).commit();
         dismiss();
 
     }
 
     private void checkOut(boolean issendtoServer) {
 
-        e_sampark.getSharedPreferences().edit().putString("TAG", Const.CHECKIN).commit();
-        e_sampark.getSharedPreferences().edit().putBoolean(Const.PREF_COMPLETE_VISIT, true).commit();
+        e_crm.getSharedPreferences().edit().putString("TAG", Const.CHECKIN).commit();
+        e_crm.getSharedPreferences().edit().putBoolean(Const.PREF_COMPLETE_VISIT, true).commit();
         CheckStatus checkStatus = (CheckStatus) getActivity().getSupportFragmentManager().findFragmentByTag(CheckStatus.class.getSimpleName());
         if (checkStatus != null) {
             checkStatus.changeButtonState();
@@ -449,7 +449,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
                                         progress.dismiss();
                                     }
                                     AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
-                                    asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
+                                    asyncSendVisit.execute(url, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
 
                                 }
                             });
@@ -458,12 +458,12 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
                     });
                 } else {
                     AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
-                    asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
+                    asyncSendVisit.execute(url, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), m_crmModel.getReferenceVisitId());
                 }
 
 //                AsyncSendVisit asyncSendVisit = new AsyncSendVisit();
-////                asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, m_crmModel.getCheckInImagePath(), m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkOutImage, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString());
-//                asyncSendVisit.execute(url, e_sampark.getSharedPreferences().getString("usermobilenumber", ""), e_sampark.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString());
+////                asyncSendVisit.execute(url, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, m_crmModel.getCheckInImagePath(), m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkOutImage, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString());
+//                asyncSendVisit.execute(url, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), m_crmModel.getCusId(), m_crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, m_crmModel.getCheckInLat(), m_crmModel.getCheckInLong(), m_crmModel.getCheckInTimeStemp(), checkouturl, checkOutLat, checkOutLong, checkOutTimeStemp, tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString());
             } else {
                 Util.showAlertDialog(getActivity(), "No Internet Connectivit available,Visit is added locally");
                 updateData(true);
@@ -479,7 +479,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
 
     private void updateData(boolean issendtoserver) {
         CRMModel crmModel = new CRMModel();
-        crmModel.setCrmId((int) e_sampark.getSharedPreferences().getLong("LASTROWID", 0));
+        crmModel.setCrmId((int) e_crm.getSharedPreferences().getLong("LASTROWID", 0));
         crmModel.setCheckOutLat(checkOutLat);
         crmModel.setCheckOutLong(checkOutLong);
         crmModel.setCheckOutImagePath(checkOutImage);
@@ -506,7 +506,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
 
 
         crmModel.setIsCompleteVisit(1);
-        long id = e_sampark.getSymphonyDB().updateCRM(crmModel);
+        long id = e_crm.getSymphonyDB().updateCRM(crmModel);
     }
 
     public void loadPurposeSpinner() {
@@ -528,12 +528,12 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
 
     private void loadPurpose() {
         purposeList = new ArrayList<>();
-        purposeList = e_sampark.getSymphonyDB().getPurposeList();
+        purposeList = e_crm.getSymphonyDB().getPurposeList();
     }
 
     private void loadNextAction() {
         nextActionList = new ArrayList<>();
-        nextActionList = e_sampark.getSymphonyDB().getNextActionList();
+        nextActionList = e_crm.getSymphonyDB().getNextActionList();
     }
 
 
@@ -621,7 +621,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
             WSVisit wsVisit = new WSVisit();
             boolean isSuccess = wsVisit.executeAddCustomer(url, mobileNumber, empid, customerid, location, discussion, puposeid, nextactionid, checkinimage, checkinLat, checkinLong, checkinTime, checkoutimage, checkoutLat, checkoutLong, checkoutTime, dateofnextaction, contactPerson, SymphonyUtils.getAppVersion(getActivity()), referenceVisitId);
 
-            crmModel.setCrmId((int) e_sampark.getSharedPreferences().getLong("LASTROWID", 0));
+            crmModel.setCrmId((int) e_crm.getSharedPreferences().getLong("LASTROWID", 0));
             crmModel.setCheckOutLat(checkoutLat);
             crmModel.setCheckOutLong(checkoutLong);
             crmModel.setCheckOutImagePath(checkoutimage);
@@ -655,7 +655,7 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
             } else {
                 crmModel.setCheckStatus(0);
             }
-            long id = e_sampark.getSymphonyDB().updateCRM(crmModel);
+            long id = e_crm.getSymphonyDB().updateCRM(crmModel);
             dismiss();
         }
     }

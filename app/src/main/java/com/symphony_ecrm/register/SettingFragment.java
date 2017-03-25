@@ -37,7 +37,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private ImageView imgRefreshTown;
     private ImageView imgRefreshPurpose;
     private ImageView imgRefreshNextAction;
-    private E_CRM e_sampark;
+    private E_CRM e_crm;
     private static final String HTTP_SERVER = "61.12.85.74";
     private static final String HTTP_PORT = "800";
     private static final String HTTP_PROTOCOL = "http://";
@@ -55,7 +55,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_setting, null);
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), getActivity().MODE_PRIVATE);
-        e_sampark = (E_CRM) getActivity().getApplicationContext();
+        e_crm = (E_CRM) getActivity().getApplicationContext();
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Setting");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true); // disable the button
@@ -116,7 +116,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         } else if (view == imgRefreshTown) {
             if (Util.isNetworkAvailable(getActivity())) {
-                long id = e_sampark.getSymphonyDB().getMaxTownID();
+                long id = e_crm.getSymphonyDB().getMaxTownID();
                 asyncLoadTown = new AsyncLoadTown();
                 asyncLoadTown.execute(String.valueOf(id));
             } else {
@@ -141,7 +141,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected ArrayList<PurposeModel> doInBackground(Void... params) {
-            String url = HTTP_ENDPOINT + "/CACS_Get_Pur_of_visit.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_sampark.getSharedPreferences().getString(Const.EMPID, "");
+            String url = HTTP_ENDPOINT + "/CACS_Get_Pur_of_visit.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "");
             wsPurpose = new WSPurpose();
             return wsPurpose.executePorposeLst(url);
         }
@@ -154,9 +154,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             }
             if (!isCancelled()) {
                 if (purposeModels != null && purposeModels.size() > 0) {
-                    e_sampark.getSymphonyDB().deleteAllPurpose();
+                    e_crm.getSymphonyDB().deleteAllPurpose();
                     for (int i = 0; i < purposeModels.size(); i++) {
-                        e_sampark.getSymphonyDB().insertPurpose(purposeModels.get(i));
+                        e_crm.getSymphonyDB().insertPurpose(purposeModels.get(i));
                     }
                 }
 
@@ -180,7 +180,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected ArrayList<NextActionModel> doInBackground(Void... params) {
-            String url = HTTP_ENDPOINT + "/CACS_Get_NextAction.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_sampark.getSharedPreferences().getString(Const.EMPID, "");
+            String url = HTTP_ENDPOINT + "/CACS_Get_NextAction.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "");
             wsNextAction = new WSNextAction();
             return wsNextAction.executeNextActionList(url);
         }
@@ -193,9 +193,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             }
             if (!isCancelled()) {
                 if (nextActionModels != null && nextActionModels.size() > 0) {
-                    e_sampark.getSymphonyDB().deleteAllNextAction();
+                    e_crm.getSymphonyDB().deleteAllNextAction();
                     for (int i = 0; i < nextActionModels.size(); i++) {
-                        e_sampark.getSymphonyDB().insertNextAction(nextActionModels.get(i));
+                        e_crm.getSymphonyDB().insertNextAction(nextActionModels.get(i));
                     }
                 }
 
@@ -217,7 +217,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         @Override
         protected ArrayList<TownModel> doInBackground(String... params) {
             String lasttownid = params[0];
-            String url = HTTP_ENDPOINT + "/CACS_Get_Townlist.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_sampark.getSharedPreferences().getString(Const.EMPID, "") + "&lastid=" + lasttownid;
+            String url = HTTP_ENDPOINT + "/CACS_Get_Townlist.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "") + "&lastid=" + lasttownid;
             wsTown = new WSTown();
             return wsTown.executeTown(url);
         }
@@ -230,7 +230,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             }
             if (!isCancelled()) {
                 if (townlist != null && townlist.size() > 0) {
-                    e_sampark.getSymphonyDB().insertTown(townlist);
+                    e_crm.getSymphonyDB().insertTown(townlist);
 
                 }
 

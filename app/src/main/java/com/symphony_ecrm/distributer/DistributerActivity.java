@@ -63,7 +63,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
     private AlarmManager alramManager;
     private PendingIntent alramPendingIntent;
     private DistributerInfo distInfoFrag;
-    private E_CRM e_sampark;
+    private E_CRM e_crm;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private String cacsId;
@@ -74,7 +74,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.distributer_home);
-        e_sampark = (E_CRM) getApplicationContext();
+        e_crm = (E_CRM) getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
@@ -82,7 +82,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
         mCheckStatusListener = (CheckStatusListener) getSupportFragmentManager().findFragmentById(R.id.checkStatusFragment);
         startSyncAlram();
         SymphonyUtils.startWipeDataAlram(this);
-        e_sampark.getSharedPreferences().edit().putString(Const.USERTYPE, Const.USER_CACS).commit();
+        e_crm.getSharedPreferences().edit().putString(Const.USERTYPE, Const.USER_CACS).commit();
         homeFragment = new HomeFragment();
         getSupportFragmentManager()
                 .beginTransaction()

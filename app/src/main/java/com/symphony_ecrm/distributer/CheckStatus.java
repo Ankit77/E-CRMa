@@ -1,7 +1,6 @@
 package com.symphony_ecrm.distributer;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +13,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.symphony_ecrm.CameraActivity;
 import com.symphony_ecrm.E_CRM;
 import com.symphony_ecrm.R;
 import com.symphony_ecrm.database.SymphonyDB;
@@ -38,7 +37,6 @@ import com.symphony_ecrm.model.CRMModel;
 import com.symphony_ecrm.model.CustomerListModel;
 import com.symphony_ecrm.sms.SMSService;
 import com.symphony_ecrm.utils.Const;
-import com.symphony_ecrm.utils.GetFilePath;
 import com.symphony_ecrm.utils.SymphonyUtils;
 import com.symphony_ecrm.utils.Util;
 
@@ -58,7 +56,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
     private DistributerActivityListener mDistributerListener;
     private LocationManager mLocationManager;
     private static final long TIME_DIFFERENCE = 1000 * 60 * 1;
-    private E_CRM e_sampark;
+    private E_CRM e_crm;
     private SymphonyDB symphonyDB;
     private String customerId;
     private String cameraFilePath;
@@ -89,14 +87,14 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("CHECK IN/OUT");
-        e_sampark = (E_CRM) getActivity().getApplicationContext();
+        e_crm = (E_CRM) getActivity().getApplicationContext();
         symphonyDB = new SymphonyDB(getActivity());
         setHasOptionsMenu(true);
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         View v = inflater.inflate(R.layout.checkstatus_fragment, null);
         checkStatus = (Button) v.findViewById(R.id.checkStatus);
         TextView tvCustomerName = (TextView) v.findViewById(R.id.checkStatusCustomerName);
-        tvCustomerName.setText("Customer : " + e_sampark.getSymphonyDB().getCustomerName(customerId));
+        tvCustomerName.setText("Customer : " + e_crm.getSymphonyDB().getCustomerName(customerId));
         txtMessage = (TextView) v.findViewById(R.id.txtStatusLabel);
         txtCheckINOUTLabel = (TextView) v.findViewById(R.id.checkStatusText);
         checkStatus.setOnClickListener(new OnClickListener() {
@@ -165,7 +163,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
         // Register the listener with the Location Manager to receive location updates
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         //if user type is Dom then register tick receiver for checkin/checkout enable
-        if (e_sampark.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
+        if (e_crm.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
             getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         }
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("CHECK IN/OUT");
@@ -179,8 +177,8 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
         intentFilter.addAction(DistributerActivity.LOCATION_RECEIVER);
 
 
-        if (e_sampark.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
-            long diff = Calendar.getInstance().getTimeInMillis() - e_sampark.getSharedPreferences().getLong("TIME", 0);
+        if (e_crm.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
+            long diff = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong("TIME", 0);
             if (diff > 0 && diff > TIME_DIFFERENCE) {
                 checkStatus.setEnabled(true);
                 checkStatus.setVisibility(View.VISIBLE);
@@ -194,7 +192,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
             }
 
         }
-        if (e_sampark.getSharedPreferences().getString("TAG", Const.CHECKIN).equalsIgnoreCase(Const.CHECKIN)) {
+        if (e_crm.getSharedPreferences().getString("TAG", Const.CHECKIN).equalsIgnoreCase(Const.CHECKIN)) {
             setCheckIn();
         } else {
             setCheckOut();
@@ -203,7 +201,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
     }
 
     public void changeButtonState() {
-        if (e_sampark.getSharedPreferences().getString("TAG", Const.CHECKIN).equalsIgnoreCase(Const.CHECKIN)) {
+        if (e_crm.getSharedPreferences().getString("TAG", Const.CHECKIN).equalsIgnoreCase(Const.CHECKIN)) {
             setCheckIn();
         } else {
             setCheckOut();
@@ -221,7 +219,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
     @Override
     public void onStop() {
         super.onStop();
-        if (e_sampark.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
+        if (e_crm.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
             getActivity().unregisterReceiver(tickReceiver);
         }
     }
@@ -287,7 +285,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                 Log.e(CheckStatus.class.getSimpleName(), "Time  Tick Call");
-                long diff = Calendar.getInstance().getTimeInMillis() - e_sampark.getSharedPreferences().getLong("TIME", 0);
+                long diff = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong("TIME", 0);
                 if (diff > 0 && diff > TIME_DIFFERENCE) {
                     checkStatus.setEnabled(true);
                     checkStatus.setVisibility(View.VISIBLE);
@@ -302,7 +300,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
             }
 
 
-            if (e_sampark.getSharedPreferences().getString("TAG", Const.CHECKIN).equalsIgnoreCase(Const.CHECKIN)) {
+            if (e_crm.getSharedPreferences().getString("TAG", Const.CHECKIN).equalsIgnoreCase(Const.CHECKIN)) {
                 setCheckIn();
             } else {
                 setCheckOut();
@@ -314,16 +312,19 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
 
 
     private void captureImage() {
-        Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
+        Intent intent = new Intent(getActivity(), CameraActivity.class);
+        startActivityForResult(intent, TAKE_PHOTO);
 
-            Uri outputFileUri = getPostImageUri(true, "" + System.currentTimeMillis());
-            intent1.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            intent1.putExtra("return-data", true);
-            startActivityForResult(intent1, TAKE_PHOTO);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        try {
+//
+//            Uri outputFileUri = getPostImageUri(true, "" + System.currentTimeMillis());
+//            intent1.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//            intent1.putExtra("return-data", true);
+//            startActivityForResult(intent1, TAKE_PHOTO);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private Uri getPostImageUri(boolean canCleanup, String ticket) {
@@ -346,11 +347,10 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == TAKE_PHOTO) {
                 if (requestCode == TAKE_PHOTO) {
-                    final Uri uri = Uri.fromFile(new File(cameraFilePath));
-                    selectedPath = GetFilePath.getPath(getActivity(), uri);
-                    if (e_sampark.getSharedPreferences().getString("TAG", Const.CHECKIN).toString().equalsIgnoreCase(Const.CHECKIN)) {
+                    selectedPath = data.getExtras().getString("PATH", "");
+                    if (e_crm.getSharedPreferences().getString("TAG", Const.CHECKIN).toString().equalsIgnoreCase(Const.CHECKIN)) {
                         //selectedPath = compressImage(selectedPath);
 
                         //compress image
@@ -425,7 +425,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
 
 
     public boolean isCheckStatus() {
-        return e_sampark.getSharedPreferences().getString("TAG", Const.CHECKIN).toString().equalsIgnoreCase(Const.CHECKIN);
+        return e_crm.getSharedPreferences().getString("TAG", Const.CHECKIN).toString().equalsIgnoreCase(Const.CHECKIN);
     }
 
 
@@ -460,7 +460,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
                         // do nothingdia
 
                         CRMModel crmModel = new CRMModel();
-                        e_sampark.getSharedPreferences().edit().putString("TAG", Const.CHECKOUT).commit();
+                        e_crm.getSharedPreferences().edit().putString("TAG", Const.CHECKOUT).commit();
                         changeButtonState();
                         crmModel.setCusId(customerId);
                         crmModel.setReferenceVisitId(refVisitId);
@@ -474,15 +474,15 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
                         crmModel.setCheckFlag(0);
                         crmModel.setIsSendtoServer(0);
                         crmModel.setIsCompleteVisit(0);
-                        CustomerListModel customerListModel = e_sampark.getSymphonyDB().getCustomerInfo(customerId);
+                        CustomerListModel customerListModel = e_crm.getSymphonyDB().getCustomerInfo(customerId);
                         if (customerListModel != null) {
                             crmModel.setCompanyname(customerListModel.getCustomername());
                             crmModel.setLocation(customerListModel.getTown());
                             crmModel.setConttactPerson(customerListModel.getContact());
                         }
                         long id = symphonyDB.insertCRM(crmModel);
-                        e_sampark.getSharedPreferences().edit().putLong("LASTROWID", id).commit();
-                        e_sampark.getSharedPreferences().edit().putBoolean(Const.PREF_COMPLETE_VISIT, false).commit();
+                        e_crm.getSharedPreferences().edit().putLong("LASTROWID", id).commit();
+                        e_crm.getSharedPreferences().edit().putBoolean(Const.PREF_COMPLETE_VISIT, false).commit();
                         dialog.dismiss();
                         setCheckOut();
                     }

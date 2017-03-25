@@ -29,13 +29,13 @@ public class VisitReport extends Fragment implements FragmentTitle {
     private View view;
     private ArrayList<CRMModel> visitList;
     private ListView lvVisit;
-    private E_CRM e_sampark;
+    private E_CRM e_crm;
     private TextView tvEmpty;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        e_sampark = (E_CRM) getActivity().getApplicationContext();
+        e_crm = (E_CRM) getActivity().getApplicationContext();
         view = inflater.inflate(R.layout.visit_reportlist, null);
         lvVisit = (ListView) view.findViewById(R.id.visit_reportlist_lvVisit);
         tvEmpty = (TextView) view.findViewById(R.id.visit_reportlist_tvEmpty);
@@ -57,7 +57,7 @@ public class VisitReport extends Fragment implements FragmentTitle {
 
     private void loaddata() {
 
-        visitList = e_sampark.getSymphonyDB().getVisitList();
+        visitList = e_crm.getSymphonyDB().getVisitList();
         if (visitList != null && visitList.size() > 0) {
             VisitAdapter visitAdapter = new VisitAdapter(visitList, getActivity());
             lvVisit.setAdapter(visitAdapter);
