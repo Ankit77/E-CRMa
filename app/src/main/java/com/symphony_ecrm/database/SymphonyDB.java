@@ -51,7 +51,7 @@ public class SymphonyDB extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqldb, int newversion, int oldversion) {
+    public void onUpgrade(SQLiteDatabase sqldb, int oldversion, int newversion) {
         // TODO Auto-generated method stub
         if (newversion > oldversion) {
             sqldb.execSQL("ALTER TABLE " + DB.CRM_CHECKINFO + " ADD COLUMN " + DB.CRM_CHECKINFO_REFERENCEID + " TEXT");

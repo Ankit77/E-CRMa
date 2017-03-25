@@ -102,7 +102,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     mDistributerListener.onGPSDialogOpen("Can not CHECK IN/OUT , because GPS is disabled");
                 } else {
                     if (SymphonyUtils.isAutomaticDateTime(getActivity())) {
@@ -161,7 +161,7 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
     public void onResume() {
         super.onResume();
         // Register the listener with the Location Manager to receive location updates
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         //if user type is Dom then register tick receiver for checkin/checkout enable
         if (e_crm.getSharedPreferences().getString(Const.USERTYPE, "").equalsIgnoreCase(Const.USER_DOM)) {
             getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));

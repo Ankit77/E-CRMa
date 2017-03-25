@@ -61,7 +61,7 @@ public class SMSService extends Service implements LocationListener {
 
         servicesConnected();
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
             // Do something with the recent location fix
             //  otherwise wait for the update below
@@ -69,7 +69,7 @@ public class SMSService extends Service implements LocationListener {
             this.location = location;
             //Toast.makeText(SMSService.this, "Last Location - " + addressLatLng, Toast.LENGTH_LONG).show();
         } else {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
         }
     }
 
@@ -79,7 +79,7 @@ public class SMSService extends Service implements LocationListener {
         if (intent != null) {
             if (FETCH_LOCATION_INTENT == intent.getAction()) {
                 Log.e(SMSService.class.getSimpleName(), "Location is Change");
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             } else {
                 mintent = intent;
                 mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -90,7 +90,7 @@ public class SMSService extends Service implements LocationListener {
                     callIntentMethod(intent);
                     //Toast.makeText(SMSService.this, "Last Location - " + addressLatLng, Toast.LENGTH_LONG).show();
                 } else {
-                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 }
 
             }
