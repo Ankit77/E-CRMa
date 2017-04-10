@@ -490,4 +490,12 @@ public class CheckStatus extends Fragment implements CheckStatusListener, Locati
                 .setIcon(R.drawable.ic_launcher)
                 .show();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(this);
+        }
+    }
 }

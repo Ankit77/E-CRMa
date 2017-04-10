@@ -4,12 +4,16 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +42,7 @@ import com.symphony_ecrm.model.CRMModel;
 import com.symphony_ecrm.model.CustomerListModel;
 import com.symphony_ecrm.model.NextActionModel;
 import com.symphony_ecrm.model.PurposeModel;
+import com.symphony_ecrm.register.HomeFragment;
 import com.symphony_ecrm.utils.Const;
 import com.symphony_ecrm.utils.SymphonyUtils;
 import com.symphony_ecrm.utils.Util;
@@ -667,4 +672,15 @@ public class DialogCheckIn extends DialogFragment implements View.OnClickListene
         progress.show();
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if ((visitType.equalsIgnoreCase(Const.CHECKOUT))) {
+            CheckStatus checkStatus = (CheckStatus) getFragmentManager().findFragmentByTag(CheckStatus.class.getSimpleName());
+            if (checkStatus != null) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove(checkStatus).commit();
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
 }

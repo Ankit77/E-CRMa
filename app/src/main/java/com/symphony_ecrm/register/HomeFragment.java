@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.distHome, new CustomerListFragment(), CustomerListFragment.class.getSimpleName()).hide(this)
-                            .addToBackStack(null).commit();
+                            .addToBackStack(HomeFragment.class.getName()).commit();
                 }
                 return true;
             case R.id.exit:
