@@ -55,13 +55,11 @@ import java.util.Calendar;
 public class HomeFragment extends Fragment {
 
     private View view;
-    private E_CRM e_crm;
     private static final String HTTP_SERVER = "61.12.85.74";
     private static final String HTTP_PORT = "800";
     private static final String HTTP_PROTOCOL = "http://";
 
     private String HTTP_ENDPOINT = HTTP_PROTOCOL + HTTP_SERVER + ":" + HTTP_PORT;
-    private SharedPreferences sharedPreferences;
     private ProgressDialog progress;
     private AsyncLoadNextAction asyncLoadNextAction;
     private AsyncLoadPurpose asyncLoadPurpose;
@@ -73,15 +71,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, null);
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), getActivity().MODE_PRIVATE);
-        e_crm = (E_CRM) getActivity().getApplicationContext();
         ((DistributerActivity) getActivity()).getSupportActionBar().setTitle("Home");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false); // disable the button
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false); // remove the left caret
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
         setHasOptionsMenu(true);
-        long id = e_crm.getSymphonyDB().getMaxTownID();
-        if (!e_crm.getSharedPreferences().getBoolean(Const.ISLOADDATA, false)) {
+        long id = E_CRM.getsInstance().getSymphonyDB().getMaxTownID();
+        if (!E_CRM.getsInstance().getSharedPreferences().getBoolean(Const.ISLOADDATA, false)) {
             if (Util.isNetworkAvailable(getActivity())) {
                 asyncLoadTown = new AsyncLoadTown();
                 asyncLoadTown.execute(String.valueOf(id));
@@ -102,10 +98,10 @@ public class HomeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.checkin:
-                if (!(e_crm.getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
+                if (!(E_CRM.getsInstance().getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
                     CheckStatus checkStatus = new CheckStatus();
                     Bundle bundle = new Bundle();
-                    bundle.putString("CUSID", e_crm.getSharedPreferences().getString(Const.PREF_CUSTID, ""));
+                    bundle.putString("CUSID", E_CRM.getsInstance().getSharedPreferences().getString(Const.PREF_CUSTID, ""));
                     checkStatus.setArguments(bundle);
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
@@ -159,7 +155,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected ArrayList<PurposeModel> doInBackground(Void... params) {
-            String url = HTTP_ENDPOINT + "/CACS_Get_Pur_of_visit.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "");
+            String url = HTTP_ENDPOINT + "/CACS_Get_Pur_of_visit.asp?user=track_new&pass=track123&MNO=" + E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", "") + "&EMPID=" + E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, "");
             wsPurpose = new WSPurpose();
             return wsPurpose.executePorposeLst(url);
         }
@@ -170,7 +166,7 @@ public class HomeFragment extends Fragment {
             if (!isCancelled()) {
                 if (purposeModels != null && purposeModels.size() > 0) {
                     for (int i = 0; i < purposeModels.size(); i++) {
-                        e_crm.getSymphonyDB().insertPurpose(purposeModels.get(i));
+                        E_CRM.getsInstance().getSymphonyDB().insertPurpose(purposeModels.get(i));
                     }
                 }
                 asyncLoadNextAction = new AsyncLoadNextAction();
@@ -193,7 +189,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected ArrayList<NextActionModel> doInBackground(Void... params) {
-            String url = HTTP_ENDPOINT + "/CACS_Get_NextAction.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "");
+            String url = HTTP_ENDPOINT + "/CACS_Get_NextAction.asp?user=track_new&pass=track123&MNO=" + E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", "") + "&EMPID=" + E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, "");
             wsNextAction = new WSNextAction();
             return wsNextAction.executeNextActionList(url);
         }
@@ -204,14 +200,14 @@ public class HomeFragment extends Fragment {
             if (!isCancelled()) {
                 if (nextActionModels != null && nextActionModels.size() > 0) {
                     for (int i = 0; i < nextActionModels.size(); i++) {
-                        e_crm.getSymphonyDB().insertNextAction(nextActionModels.get(i));
+                        E_CRM.getsInstance().getSymphonyDB().insertNextAction(nextActionModels.get(i));
                     }
                 }
                 if (progress != null && progress.isShowing()) {
                     progress.dismiss();
                 }
 
-                e_crm.getSharedPreferences().edit().putBoolean(Const.ISLOADDATA, true).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putBoolean(Const.ISLOADDATA, true).commit();
             }
         }
     }
@@ -229,7 +225,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected ArrayList<TownModel> doInBackground(String... params) {
             String lasttownid = params[0];
-            String url = HTTP_ENDPOINT + "/CACS_Get_Townlist.asp?user=track_new&pass=track123&MNO=" + sharedPreferences.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "") + "&lastid=" + lasttownid;
+            String url = HTTP_ENDPOINT + "/CACS_Get_Townlist.asp?user=track_new&pass=track123&MNO=" + E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", "") + "&EMPID=" + E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, "") + "&lastid=" + lasttownid;
             wsTown = new WSTown();
             return wsTown.executeTown(url);
         }
@@ -240,7 +236,7 @@ public class HomeFragment extends Fragment {
             if (!isCancelled()) {
                 if (townlist != null && townlist.size() > 0) {
 
-                    e_crm.getSymphonyDB().insertTown(townlist);
+                    E_CRM.getsInstance().getSymphonyDB().insertTown(townlist);
 
                 }
 
@@ -271,7 +267,7 @@ public class HomeFragment extends Fragment {
                         if (isforcheckoutfirst) {
                             CheckStatus checkStatus = new CheckStatus();
                             Bundle bundle = new Bundle();
-                            bundle.putString("CUSID", e_crm.getSharedPreferences().getString(Const.PREF_CUSTID, ""));
+                            bundle.putString("CUSID", E_CRM.getsInstance().getsInstance().getSharedPreferences().getString(Const.PREF_CUSTID, ""));
                             checkStatus.setArguments(bundle);
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
@@ -308,12 +304,12 @@ public class HomeFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         if (which == 0) {
-                            if ((e_crm.getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
+                            if ((E_CRM.getsInstance().getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
                                 CheckStatus checkStatus = new CheckStatus();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("CUSID", crmActID);
                                 bundle.putString("VISITREFERENCEID", cacsvisitId);
-                                e_crm.getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
+                                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
                                 checkStatus.setArguments(bundle);
                                 getActivity().getSupportFragmentManager()
                                         .beginTransaction()
@@ -361,14 +357,14 @@ public class HomeFragment extends Fragment {
                 if (rbOption != null) {
 
                     if (selectedId == R.id.dialog_nextaction_rbconvertcall) {
-                        if ((e_crm.getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
-                            CustomerListModel customerListModel = e_crm.getSymphonyDB().getCustomerInfo(crmActID);
+                        if ((E_CRM.getsInstance().getSharedPreferences().getBoolean(Const.PREF_COMPLETE_VISIT, true))) {
+                            CustomerListModel customerListModel = E_CRM.getsInstance().getSymphonyDB().getCustomerInfo(crmActID);
                             if (customerListModel != null) {
                                 CheckStatus checkStatus = new CheckStatus();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("CUSID", crmActID);
                                 bundle.putString("VISITREFERENCEID", cacsvisitId);
-                                e_crm.getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
+                                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.PREF_CUSTID, crmActID).commit();
                                 checkStatus.setArguments(bundle);
                                 getActivity().getSupportFragmentManager()
                                         .beginTransaction()

@@ -39,7 +39,6 @@ import java.util.ArrayList;
 public class CustomerListFragment extends Fragment implements
         SearchView.OnQueryTextListener, CustomerAdapter.myClickListner {
 
-    private E_CRM e_crm;
     private ArrayList<CustomerListModel> customerList;
     private ListView lvCusList;
     private CustomerAdapter customerAdapter;
@@ -62,7 +61,6 @@ public class CustomerListFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        e_crm = (E_CRM) getActivity().getApplicationContext();
         setHasOptionsMenu(true);
 //			    ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Distributor List");
 
@@ -87,7 +85,7 @@ public class CustomerListFragment extends Fragment implements
         customerAdapter = new CustomerAdapter(customerList, getActivity());
         customerAdapter.setMmyClickListner(this);
         lvCusList.setAdapter(customerAdapter);
-        final ArrayList<CustomerListModel> cuslist = e_crm.getSymphonyDB().getCustomerList("");
+        final ArrayList<CustomerListModel> cuslist = E_CRM.getsInstance().getSymphonyDB().getCustomerList("");
         if (cuslist == null || cuslist.size() == 0) {
             if (Util.isNetworkAvailable(getActivity()))
                 new AsyncLoadCustomer().execute();
@@ -124,7 +122,7 @@ public class CustomerListFragment extends Fragment implements
                 if (Util.isNetworkAvailable(getActivity())) {
                     new AsyncLoadCustomer().execute();
                 } else {
-                    Util.showAlertDialog(getActivity(), e_crm.getString(R.string.alert_noconnectivy));
+                    Util.showAlertDialog(getActivity(), E_CRM.getsInstance().getString(R.string.alert_noconnectivy));
                 }
                 return true;
             default:
@@ -201,7 +199,7 @@ public class CustomerListFragment extends Fragment implements
                 }
             }
             customerList.clear();
-            customerList.addAll(e_crm.getSymphonyDB().getCustomerList(searchTerm));
+            customerList.addAll(E_CRM.getsInstance().getSymphonyDB().getCustomerList(searchTerm));
             customerAdapter.notifyDataSetChanged();
         }
         return true;
@@ -257,7 +255,7 @@ public class CustomerListFragment extends Fragment implements
         CheckStatus checkStatus = new CheckStatus();
         Bundle bundle = new Bundle();
         bundle.putString("CUSID", customerList.get(position).getId());
-        e_crm.getSharedPreferences().edit().putString(Const.PREF_CUSTID, customerList.get(position).getId()).commit();
+        E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.PREF_CUSTID, customerList.get(position).getId()).commit();
         checkStatus.setArguments(bundle);
         getFragmentManager()
                 .beginTransaction()
@@ -277,7 +275,7 @@ public class CustomerListFragment extends Fragment implements
         @Override
         protected ArrayList<CustomerListModel> doInBackground(Void... voids) {
 
-            String url = HTTP_ENDPOINT + "/CACS_Get_Customerlist.asp?user=track_new&pass=track123&MNO=" + prefs.getString("usermobilenumber", "") + "&EMPID=" + e_crm.getSharedPreferences().getString(Const.EMPID, "");
+            String url = HTTP_ENDPOINT + "/CACS_Get_Customerlist.asp?user=track_new&pass=track123&MNO=" + prefs.getString("usermobilenumber", "") + "&EMPID=" + E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, "");
             wsCustomer = new WSCustomer();
             return wsCustomer.executeCustomerLst(url);
         }
@@ -289,10 +287,10 @@ public class CustomerListFragment extends Fragment implements
                 progress.dismiss();
             }
             if (customerListModels != null && customerListModels.size() > 0) {
-                e_crm.getSymphonyDB().deleteAllCustomer();
-                e_crm.getSymphonyDB().insertCustomer(customerListModels);
+                E_CRM.getsInstance().getSymphonyDB().deleteAllCustomer();
+                E_CRM.getsInstance().getSymphonyDB().insertCustomer(customerListModels);
                 customerList.clear();
-                customerList.addAll(e_crm.getSymphonyDB().getCustomerList(""));
+                customerList.addAll(E_CRM.getsInstance().getSymphonyDB().getCustomerList(""));
                 customerAdapter.notifyDataSetChanged();
             }
         }

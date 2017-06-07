@@ -26,7 +26,6 @@ import java.util.Calendar;
 
 
 public class TimeTickService extends Service {
-    private E_CRM e_crm;
     private String TAG = TimeTickService.class.getSimpleName();
 
     @Nullable
@@ -49,7 +48,6 @@ public class TimeTickService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         WriteLog.E(TimeTickService.class.getSimpleName(), "Service Start");
-        e_crm = (E_CRM) getApplicationContext();
         registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         return START_STICKY;
 
@@ -65,25 +63,25 @@ public class TimeTickService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
-                if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+                if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
                     Log.e(CheckStatus.class.getSimpleName(), "Time  Tick Call");
 
-                    long diff_wipedata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_WIPEDATA, 0);
+                    long diff_wipedata = Calendar.getInstance().getTimeInMillis() - E_CRM.getsInstance().getSharedPreferences().getLong(Const.PREF_WIPEDATA, 0);
                     if (diff_wipedata >= Const.WIPETIME) {
                         Log.e(TAG, "WIPE IS CALL");
                         Intent wipedataService = new Intent(context, WipeDataService.class);
                         startService(wipedataService);
-                        SharedPreferences.Editor editor = e_crm.getSharedPreferences().edit();
+                        SharedPreferences.Editor editor = E_CRM.getsInstance().getSharedPreferences().edit();
                         editor.putLong(Const.PREF_WIPEDATA, Calendar.getInstance().getTimeInMillis());
                         editor.commit();
                     }
 
-                    long diff_syncdata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_SYNC, 0);
+                    long diff_syncdata = Calendar.getInstance().getTimeInMillis() - E_CRM.getsInstance().getSharedPreferences().getLong(Const.PREF_SYNC, 0);
                     if (diff_syncdata >= Const.SYNCDATA_INTERVAL) {
                         Log.e(TAG, "SYNC IS CALL");
                         Intent syncdataService = new Intent(context, VisitsyncService.class);
                         startService(syncdataService);
-                        SharedPreferences.Editor editor = e_crm.getSharedPreferences().edit();
+                        SharedPreferences.Editor editor = E_CRM.getsInstance().getSharedPreferences().edit();
                         editor.putLong(Const.PREF_SYNC, Calendar.getInstance().getTimeInMillis());
                         editor.commit();
                     }

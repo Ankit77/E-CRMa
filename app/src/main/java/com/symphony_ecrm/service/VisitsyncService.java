@@ -29,7 +29,6 @@ import java.util.ArrayList;
  */
 
 public class VisitsyncService extends Service {
-    private E_CRM e_crm;
     private static final String HTTP_SERVER = "61.12.85.74";
     private static final String HTTP_PORT = "800";
     private static final String HTTP_PROTOCOL = "http://";
@@ -49,9 +48,8 @@ public class VisitsyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        e_crm = (E_CRM) getApplicationContext();
         storage = FirebaseStorage.getInstance();
-        visitList = e_crm.getSymphonyDB().getVisitForSynctoServer();
+        visitList = E_CRM.getsInstance().getSymphonyDB().getVisitForSynctoServer();
         if (visitList != null && visitList.size() > 0) {
             totalCount = visitList.size();
             currentVisit = 0;
@@ -113,7 +111,7 @@ public class VisitsyncService extends Service {
                                 crmModel.setCheckOutImagePath(checkouturl);
 
                                 AsyncSendVisit asyncSendVisit = new AsyncSendVisit(crmModel);
-                                asyncSendVisit.execute(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), checkinUrl, crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), checkouturl, crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
+                                asyncSendVisit.execute(HTTP_ENDPOINT, E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", ""), E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), checkinUrl, crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), checkouturl, crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
 
                             }
                         });
@@ -125,7 +123,7 @@ public class VisitsyncService extends Service {
 //                    boolean issuccess = wsVisit.executeAddCustomer(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitSyncReceiver.this));
             } else {
                 AsyncSendVisit asyncSendVisit = new AsyncSendVisit(crmModel);
-                asyncSendVisit.execute(HTTP_ENDPOINT, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
+                asyncSendVisit.execute(HTTP_ENDPOINT,  E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", ""),  E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), crmModel.getDiscussion(), crmModel.getPurposeId(), crmModel.getNextactionId(), crmModel.getCheckInImagePath(), crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), crmModel.getCheckOutImagePath(), crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), crmModel.getActiondate(), crmModel.getConttactPerson(), SymphonyUtils.getAppVersion(VisitsyncService.this), crmModel.getReferenceVisitId());
             }
         }
     }
@@ -157,7 +155,7 @@ public class VisitsyncService extends Service {
                 crmModel.setCheckStatus(0);
             }
 
-            long id = e_crm.getSymphonyDB().updateCRM(crmModel);
+            long id =  E_CRM.getsInstance().getSymphonyDB().updateCRM(crmModel);
             Intent refreshIntent = new Intent();
             refreshIntent.setAction("REFRESH");
             sendBroadcast(refreshIntent);

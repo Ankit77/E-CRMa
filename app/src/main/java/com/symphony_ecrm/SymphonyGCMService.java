@@ -43,7 +43,6 @@ public class SymphonyGCMService extends Service {
     private String masterPort;
     private SharedPreferences prefs;
     private SharedPreferences.Editor edit;
-    private E_CRM e_crm;
 
     public static boolean isIpAddress(String ipAddress) {
         String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -92,8 +91,7 @@ public class SymphonyGCMService extends Service {
                                 + extras.toString());
                     } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
                             .equals(messageType)) {
-                        e_crm = (E_CRM) getApplicationContext();
-                        if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+                        if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
                             String message = extras.getString(SymphonyUtils.MESSAGE_KEY, "");
                             String notificationType = extras.getString(Const.KEY_NOTIFICATIONTYPE);
                             if (notificationType == null) {
@@ -231,50 +229,77 @@ public class SymphonyGCMService extends Service {
     }
 
     Notification createNotification(Context context, String message, String cacsVisitID, String crmActId) {
-        Notification.Builder notificationBuilder;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder = new Notification.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
-                    .setContentText(message);
-            if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
-                notificationBuilder.setOngoing(false).setAutoCancel(true);
-            }
-        } else {
-            notificationBuilder = new Notification.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setPriority(Notification.PRIORITY_DEFAULT)
-                    .setCategory(Notification.CATEGORY_MESSAGE)
-                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
-                    .setContentText(message);
-            if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
-                notificationBuilder.setOngoing(false).setAutoCancel(true);
-            }
+//        Notification.Builder notificationBuilder;
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            notificationBuilder = new Notification.Builder(this)
+//                    .setSmallIcon(R.drawable.ic_launcher)
+//                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
+//                    .setContentText(message);
+//            if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
+//                notificationBuilder.setOngoing(false).setAutoCancel(true);
+//            }
+//        } else {
+//            notificationBuilder = new Notification.Builder(this)
+//                    .setSmallIcon(R.drawable.ic_launcher)
+//                    .setPriority(Notification.PRIORITY_DEFAULT)
+//                    .setCategory(Notification.CATEGORY_MESSAGE)
+//                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
+//                    .setContentText(message);
+//            if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
+//                notificationBuilder.setOngoing(false).setAutoCancel(true);
+//            }
+//
+//        }
+//
+//        Intent push = new Intent();
+//        if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
+//            push.putExtra(Const.KEY_CACSVISITID, cacsVisitID);
+//            push.putExtra(Const.KEY_CRMACTID, crmActId);
+//            push.putExtra(Const.KEY_NOTIFICATIONTYPE, Const.TYPE_VISIT);
+//        }
+////        push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////        push.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+////                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        push.setClass(context, DistributerActivity.class);
+//
+//        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
+//                push, 0);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            notificationBuilder
+//                    .setContentText(message)
+//                    .setFullScreenIntent(fullScreenPendingIntent, true).setContentIntent(fullScreenPendingIntent);
+//        } else {
+//            notificationBuilder
+//                    .setContentText(message)
+//                    .setContentIntent(fullScreenPendingIntent);
+//        }
+//
+//        return notificationBuilder.build();
 
-        }
-
-        Intent push = new Intent();
+        Intent notificationIntent = new Intent(context, DistributerActivity.class);
         if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
-            push.putExtra(Const.KEY_CACSVISITID, cacsVisitID);
-            push.putExtra(Const.KEY_CRMACTID, crmActId);
-            push.putExtra(Const.KEY_NOTIFICATIONTYPE, Const.TYPE_VISIT);
+            notificationIntent.putExtra(Const.KEY_CACSVISITID, cacsVisitID);
+            notificationIntent.putExtra(Const.KEY_CRMACTID, crmActId);
+            notificationIntent.putExtra(Const.KEY_NOTIFICATIONTYPE, Const.TYPE_VISIT);
         }
-        push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        push.setClass(context, DistributerActivity.class);
+//        push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        push.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        notificationIntent.setClass(context, DistributerActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
-                push, PendingIntent.FLAG_CANCEL_CURRENT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder
-                    .setContentText(message)
-                    .setFullScreenIntent(fullScreenPendingIntent, true).setContentIntent(fullScreenPendingIntent);
-        } else {
-            notificationBuilder
-                    .setContentText(message)
-                    .setContentIntent(fullScreenPendingIntent);
-        }
-
-        return notificationBuilder.build();
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("e-CRM Notification")
+                .setContentIntent(intent)
+                .setPriority(5) //private static final PRIORITY_HIGH = 5;
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
+//        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(0, mBuilder.build());
+        return mBuilder.build();
     }
 
     @Override

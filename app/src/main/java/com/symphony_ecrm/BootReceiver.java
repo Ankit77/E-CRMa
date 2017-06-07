@@ -23,22 +23,20 @@ public class BootReceiver extends BroadcastReceiver {
     private Context context;
 
     private SharedPreferences prefs;
-    private E_CRM e_crm;
 
 
     @SuppressLint("NewApi")
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
-        e_crm = (E_CRM) context.getApplicationContext();
         // TODO Auto-generated method stub
         if ((intent.getAction().equals("android.intent.action.BOOT_COMPLETED")
                 || intent.getAction().equals("android.intent.action.QUICKBOOT_POWERON")
         )) {
             SymphonyUtils.startWipeDataAlram(context);
             startLocationService();
-            e_crm.getSharedPreferences().edit().putBoolean(Const.PREF_ISSYNCDATA, true).commit();
-            if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+            E_CRM.getsInstance().getSharedPreferences().edit().putBoolean(Const.PREF_ISSYNCDATA, true).commit();
+            if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
                 if (!Util.isMyServiceRunning(TimeTickService.class, context)) {
                     Intent service_intent = new Intent(context, TimeTickService.class);
                     context.startService(service_intent);

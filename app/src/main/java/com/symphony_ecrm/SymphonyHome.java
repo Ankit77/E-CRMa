@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.symphony_ecrm.distributer.DistributerActivity;
 import com.symphony_ecrm.register.RegisterFragment;
+import com.symphony_ecrm.service.CustomerListService;
 import com.symphony_ecrm.service.TimeTickService;
 import com.symphony_ecrm.service.VisitsyncService;
 import com.symphony_ecrm.service.WipeDataService;
@@ -51,8 +52,6 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
     private SharedPreferences prefs;
     private LocationManager mLocationManager;
     private GoogleApiClient googleApiClient;
-    private E_CRM e_crm;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,6 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
-        e_crm = (E_CRM) getApplicationContext();
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         this.getSupportActionBar().setDisplayShowCustomEnabled(true);
         //this.getSupportActionBar().setCustomView(R.layout.home_actionbar);
@@ -76,24 +74,24 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
         asyncRegisterGCM.execute();
 
-        if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+        if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
             //Check time diffrence for Wipe Data
-            long diff_wipedata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_WIPEDATA, 0);
+            long diff_wipedata = Calendar.getInstance().getTimeInMillis() - E_CRM.getsInstance().getSharedPreferences().getLong(Const.PREF_WIPEDATA, 0);
             if (diff_wipedata >= Const.WIPETIME) {
                 Log.e(SymphonyHome.class.getSimpleName(), "WIPE IS CALL");
                 Intent wipedataService = new Intent(SymphonyHome.this, WipeDataService.class);
                 startService(wipedataService);
-                SharedPreferences.Editor editor = e_crm.getSharedPreferences().edit();
+                SharedPreferences.Editor editor = E_CRM.getsInstance().getSharedPreferences().edit();
                 editor.putLong(Const.PREF_WIPEDATA, Calendar.getInstance().getTimeInMillis());
                 editor.commit();
             }
 
-            long diff_syncdata = Calendar.getInstance().getTimeInMillis() - e_crm.getSharedPreferences().getLong(Const.PREF_SYNC, 0);
+            long diff_syncdata = Calendar.getInstance().getTimeInMillis() - E_CRM.getsInstance().getSharedPreferences().getLong(Const.PREF_SYNC, 0);
             if (diff_syncdata >= Const.SYNCDATA_INTERVAL) {
                 Log.e(SymphonyHome.class.getSimpleName(), "SYNC IS CALL");
                 Intent syncdataService = new Intent(SymphonyHome.this, VisitsyncService.class);
                 startService(syncdataService);
-                SharedPreferences.Editor editor = e_crm.getSharedPreferences().edit();
+                SharedPreferences.Editor editor = E_CRM.getsInstance().getSharedPreferences().edit();
                 editor.putLong(Const.PREF_SYNC, Calendar.getInstance().getTimeInMillis());
                 editor.commit();
             }
@@ -117,6 +115,8 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.homeFragment, new RegisterFragment()).commitAllowingStateLoss();
         } else {
+            Intent intent_custmorList=new Intent(this, CustomerListService.class);
+            startService(intent_custmorList);
             Intent intent = new Intent(this, DistributerActivity.class);
             startActivity(intent);
             finish();

@@ -94,7 +94,6 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
     private View view;
     private CRMModel crmModel;
     private int CRMID;
-    private E_CRM e_crm;
     private Calendar calendar = Calendar.getInstance();
     private int mYear, mMonth, mDay, mHour, mMinute;
     private Menu mmenu;
@@ -126,7 +125,6 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // remove the left caret
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle("Visit Detail");
-        e_crm = (E_CRM) getApplicationContext();
         loadNextAction();
         loadPurpose();
         etDiscussion = (EditText) findViewById(R.id.fragment_visit_detail_etDiscussion);
@@ -339,7 +337,7 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                crmModel = e_crm.getSymphonyDB().getVisit(CRMID);
+                crmModel = E_CRM.getsInstance().getSymphonyDB().getVisit(CRMID);
                 if (crmModel != null) {
                     if (crmModel.getNextaction().equalsIgnoreCase("CloseLead")) {
                         tvNextActionDate.setVisibility(View.GONE);
@@ -393,12 +391,12 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
 
     private void loadPurpose() {
         purposeList = new ArrayList<>();
-        purposeList = e_crm.getSymphonyDB().getPurposeList();
+        purposeList = E_CRM.getsInstance().getSymphonyDB().getPurposeList();
     }
 
     private void loadNextAction() {
         nextActionList = new ArrayList<>();
-        nextActionList = e_crm.getSymphonyDB().getNextActionList();
+        nextActionList = E_CRM.getsInstance().getSymphonyDB().getNextActionList();
     }
 
 
@@ -568,7 +566,7 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
                                     progress.dismiss();
                                 }
                                 asyncSendVisit = new AsyncSendVisit();
-                                asyncSendVisit.execute(url, e_crm.getSharedPreferences().getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), checkouturl, crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), crmModel.getReferenceVisitId());
+                                asyncSendVisit.execute(url, E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", ""), E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, ""), crmModel.getCusId(), crmModel.getLocation(), etDiscussion.getText().toString(), purposeId, nextActionId, checkinUrl, crmModel.getCheckInLat(), crmModel.getCheckInLong(), crmModel.getCheckInTimeStemp(), checkouturl, crmModel.getCheckOutLat(), crmModel.getCheckOutLong(), crmModel.getCheckOutTimeStemp(), tvNextActionDate.getText().toString(), tvContactPerson.getText().toString(), tvPurposeofVisit.getText().toString(), tvNextAction.getText().toString(), crmModel.getReferenceVisitId());
 
                             }
                         });
@@ -594,7 +592,7 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
                 crmModel.setCheckFlag(0);
                 crmModel.setIsSendtoServer(1);
                 crmModel.setIsCompleteVisit(1);
-                long id = e_crm.getSymphonyDB().updateCRM(crmModel);
+                long id = E_CRM.getsInstance().getSymphonyDB().updateCRM(crmModel);
             }
         } else {
             crmModel.setConttactPerson(etDiscussion.getText().toString());
@@ -610,7 +608,7 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
             crmModel.setCheckFlag(0);
             crmModel.setIsSendtoServer(0);
             crmModel.setIsCompleteVisit(1);
-            long id = e_crm.getSymphonyDB().updateCRM(crmModel);
+            long id = E_CRM.getsInstance().getSymphonyDB().updateCRM(crmModel);
         }
 
     }
@@ -677,7 +675,7 @@ public class VisitDetailActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     crmModel.setCheckStatus(0);
                 }
-                long id = e_crm.getSymphonyDB().updateCRM(crmModel);
+                long id = E_CRM.getsInstance().getSymphonyDB().updateCRM(crmModel);
                 finish();
             }
 

@@ -58,15 +58,11 @@ public class AddCustomerFragment extends Fragment implements View.OnClickListene
 //    private EditText editTextCity;
     private Button buttonCheckIn;
     private ArrayList<TownModel> townlist;
-    private E_CRM e_crm;
-    private SharedPreferences sharedPreferences;
     private ProgressDialog progress;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        e_crm = (E_CRM) getActivity().getApplicationContext();
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), getActivity().MODE_PRIVATE);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_add_customer, null);
     }
@@ -96,7 +92,7 @@ public class AddCustomerFragment extends Fragment implements View.OnClickListene
         etPincode = (EditText) view.findViewById(R.id.fragment_add_customer_edtPincoe);
         buttonCheckIn = (Button) view.findViewById(R.id.fragment_add_customer_btn_submit);
         buttonCheckIn.setOnClickListener(this);
-        ArrayList<String> townlist = e_crm.getSymphonyDB().getTownListOnly();
+        ArrayList<String> townlist = E_CRM.getsInstance().getSymphonyDB().getTownListOnly();
         if (townlist != null && townlist.size() > 0) {
             ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, townlist);
             text.setAdapter(adapter);
@@ -159,7 +155,7 @@ public class AddCustomerFragment extends Fragment implements View.OnClickListene
         } else if (!isValidEmail(etemail.getText().toString())) {
             showAlertDialog("Please enter valid Email.");
             return false;
-        } else if (TextUtils.isEmpty(e_crm.getSymphonyDB().getTown(ettown.getText().toString()))) {
+        } else if (TextUtils.isEmpty(E_CRM.getsInstance().getSymphonyDB().getTown(ettown.getText().toString()))) {
             showAlertDialog("Please enter Valid Town.");
             return false;
         } else {
@@ -181,7 +177,7 @@ public class AddCustomerFragment extends Fragment implements View.OnClickListene
             if (Util.isNetworkAvailable(getActivity())) {
                 String url = HTTP_ENDPOINT + "/CACS_Create_Customer.asp";
                 AsyncAddCustomer asyncAddCustomer = new AsyncAddCustomer();
-                asyncAddCustomer.execute(url, sharedPreferences.getString("usermobilenumber", ""), e_crm.getSharedPreferences().getString(Const.EMPID, ""), etCustmerName.getText().toString(), etAddress.getText().toString(), e_crm.getSymphonyDB().getTown(ettown.getText().toString()), etConttactName.getText().toString(), etDesignation.getText().toString(), etMobile.getText().toString(), etemail.getText().toString(), etPincode.getText().toString());
+                asyncAddCustomer.execute(url, E_CRM.getsInstance().getSharedPreferences().getString("usermobilenumber", ""), E_CRM.getsInstance().getSharedPreferences().getString(Const.EMPID, ""), etCustmerName.getText().toString(), etAddress.getText().toString(), E_CRM.getsInstance().getSymphonyDB().getTown(ettown.getText().toString()), etConttactName.getText().toString(), etDesignation.getText().toString(), etMobile.getText().toString(), etemail.getText().toString(), etPincode.getText().toString());
             } else {
                 Util.showAlertDialog(getActivity(), getString(R.string.alert_noconnectivy));
             }

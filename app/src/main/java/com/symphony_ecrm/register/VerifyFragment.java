@@ -30,6 +30,7 @@ import com.symphony_ecrm.distributer.DistributerActivity;
 import com.symphony_ecrm.http.HttpManager;
 import com.symphony_ecrm.http.HttpStatusListener;
 import com.symphony_ecrm.http.OTPListener;
+import com.symphony_ecrm.service.CustomerListService;
 
 import java.text.SimpleDateFormat;
 
@@ -122,6 +123,7 @@ public class VerifyFragment extends Fragment {
                         public void onAddCustomerStatus(Boolean status) {
 
                         }
+
                         @Override
                         public void onVerifyStatus(Boolean status) {
                             // TODO Auto-generated method stub
@@ -261,6 +263,8 @@ public class VerifyFragment extends Fragment {
                 closeKeyBoard();
                 boolean isRegister = prefs.getBoolean("isregister", false);
                 if (isRegister) {
+                    Intent intent_custmorList = new Intent(getActivity(), CustomerListService.class);
+                    getActivity().startService(intent_custmorList);
                     Intent intent = new Intent(getActivity(), DistributerActivity.class);
                     getActivity().startActivity(intent);
                     getActivity().finish();

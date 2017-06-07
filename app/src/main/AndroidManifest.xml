@@ -122,6 +122,7 @@
         <service android:name=".service.VisitsyncService"></service>
         <service android:name=".service.TimeTickService"></service>
         <service android:name=".service.WipeDataService"></service>
+        <service android:name=".service.CustomerListService"></service>
 
         <activity
             android:name="com.symphony_ecrm.report.SymphonyReport"

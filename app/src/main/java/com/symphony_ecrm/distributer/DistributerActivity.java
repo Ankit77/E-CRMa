@@ -82,7 +82,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
         mCheckStatusListener = (CheckStatusListener) getSupportFragmentManager().findFragmentById(R.id.checkStatusFragment);
         startSyncAlram();
         SymphonyUtils.startWipeDataAlram(this);
-        e_crm.getSharedPreferences().edit().putString(Const.USERTYPE, Const.USER_CACS).commit();
+        E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.USERTYPE, Const.USER_CACS).commit();
         homeFragment = new HomeFragment();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -165,11 +165,11 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GPS_RESULT) {
-            if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 if (mCheckStatusListener != null)
                     mCheckStatusListener.onGPSOK();
                 Log.e("gps", resultCode + " " + requestCode + " " +
-                        mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                        mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
                 );
             }
         } else if (requestCode == GET_DISTRIBUTER_IMAGE_REQUEST) {

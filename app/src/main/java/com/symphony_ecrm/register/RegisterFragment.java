@@ -45,12 +45,10 @@ public class RegisterFragment extends Fragment {
     private String MX_HTTP_PORT = "900";
     private String INT_HTTP_SERVER = "61.12.85.74";
     private String INT_HTTP_PORT = "900";
-    private E_CRM e_crm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        e_crm = (E_CRM) getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.register_fragment, container, false);
         registerBtn = (Button) v.findViewById(R.id.registerBtn);
         userNameText = (EditText) v.findViewById(R.id.userNameField);
@@ -218,7 +216,7 @@ public class RegisterFragment extends Fragment {
 
                                                     mProgressBar.dismiss();
 
-                                                    Toast.makeText(getActivity(), e_crm.getSharedPreferences().getString(Const.MESSAGE, ""), Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), E_CRM.getsInstance().getSharedPreferences().getString(Const.MESSAGE, ""), Toast.LENGTH_LONG).show();
                                                     return;
                                                 }
                                                 Log.e("RegisterFragment ", "OTP RECEIVED " +
@@ -280,7 +278,7 @@ public class RegisterFragment extends Fragment {
 
                                 mProgressBar.dismiss();
 
-                                Toast.makeText(getActivity(), e_crm.getSharedPreferences().getString(Const.MESSAGE, ""), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), E_CRM.getsInstance().getSharedPreferences().getString(Const.MESSAGE, ""), Toast.LENGTH_LONG).show();
                             }
                         }
 

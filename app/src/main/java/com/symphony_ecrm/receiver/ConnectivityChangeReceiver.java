@@ -15,17 +15,14 @@ import com.symphony_ecrm.utils.Util;
 
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
-    private static final String HTTP_PROTOCOL = "http://";
-    private E_CRM e_crm;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        e_crm = (E_CRM) context.getApplicationContext();
         NetworkInfo networkInfo = intent
                 .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
         if (networkInfo != null) {
             //Start service for checking wipe data && Sync Pending Data
-            if (e_crm.getSharedPreferences().getBoolean("isregister", false)) {
+            if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
                 if (!Util.isMyServiceRunning(TimeTickService.class, context)) {
                     Intent service_intent = new Intent(context, TimeTickService.class);
                     context.startService(service_intent);

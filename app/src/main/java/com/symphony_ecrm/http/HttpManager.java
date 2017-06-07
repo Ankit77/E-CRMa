@@ -95,12 +95,10 @@ public class HttpManager {
 
     private ArrayList<HttpStatusListener> httpStatusListener = new ArrayList<HttpStatusListener>();
     private ArrayList<OTPListener> otpListener = new ArrayList<OTPListener>();
-    private E_CRM e_crm;
 
     public HttpManager(Context context) {
 
         this.context = context;
-        e_crm = (E_CRM) context.getApplicationContext();
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 1000 * 120);
@@ -986,7 +984,7 @@ public class HttpManager {
                 //Log.e("REGISTER USER OTP " , otp+"");
 
                 data.setMessage(message);
-                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
 
 
             } else if (name.equals("empid")) {
@@ -1053,7 +1051,7 @@ public class HttpManager {
                 //Log.e("REGISTER USER OTP " , otp+"");
 
                 data.setMessage(message);
-                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
 
 
             } else if (name.equals("empid")) {
@@ -1224,7 +1222,7 @@ public class HttpManager {
 
             } else if (name.equals("message")) {
                 String message = readmessage(parser);
-                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.MESSAGE, message).commit();
             }
         }
         return issuccess;
@@ -1251,11 +1249,11 @@ public class HttpManager {
                     issuccess = false;
                 }
             } else if (name.equalsIgnoreCase("usertype")) {
-                e_crm.getSharedPreferences().edit().putString(Const.USERTYPE, readusertype(parser)).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.USERTYPE, readusertype(parser)).commit();
             } else if (name.equalsIgnoreCase("empid")) {
-                e_crm.getSharedPreferences().edit().putString(Const.EMPID, readempId(parser)).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.EMPID, readempId(parser)).commit();
             } else if (name.equalsIgnoreCase("message")) {
-                e_crm.getSharedPreferences().edit().putString(Const.MESSAGE, readmessage(parser)).commit();
+                E_CRM.getsInstance().getSharedPreferences().edit().putString(Const.MESSAGE, readmessage(parser)).commit();
             }
         }
         return issuccess;
