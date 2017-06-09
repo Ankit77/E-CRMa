@@ -36,6 +36,8 @@ public class Const {
     public static final String KEY_NOTIFICATIONTYPE = "notificationtype";
     public static final String KEY_CACSVISITID = "cacsvisitid";
     public static final String KEY_CRMACTID = "crmactid";
+    public static final String KEY_USERMOBILENUMBER = "UserMobileNumber";
+    public static final String KEY_END_CUSTOMER_MOBILENUMBER = "End_Customer_MobileNumber";
     public static final String TYPE_NORMAL = "normal";
     public static final String TYPE_VISIT = "visit";
     public static final String PREF_WIPEDATA = "WIPEDATA";

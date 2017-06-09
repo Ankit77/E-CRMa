@@ -302,7 +302,7 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
                         try {
                             Intent viewIntent =
                                     new Intent("android.intent.action.VIEW",
-                                            Uri.parse("https://play.google.com/store/apps/details?id=com.mysosfamily"));
+                                            Uri.parse("https://play.google.com/store/apps/details?id=com.symphony_ecrm"));
                             startActivity(viewIntent);
                         } catch (Exception e) {
                             Toast.makeText(SymphonyHome.this, "Unable to Connect Try Again...",
@@ -338,7 +338,7 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
             super.onPostExecute(s);
             SymphonyUtils.dismissProgressDialog(progressDialog);
             if (!TextUtils.isEmpty(s)) {
-                if (!s.equalsIgnoreCase(SymphonyUtils.getAppVersion(SymphonyHome.this))) {
+                if (s.equalsIgnoreCase(SymphonyUtils.getAppVersion(SymphonyHome.this))) {
                     showAlertDialog(SymphonyHome.this, "E-CRM needs an update. There's a new version of E-CRM available on PlayStore.");
                 } else {
                     AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();

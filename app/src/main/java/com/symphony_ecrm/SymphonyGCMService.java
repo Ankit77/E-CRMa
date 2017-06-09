@@ -36,9 +36,6 @@ public class SymphonyGCMService extends Service {
 //    AIzaSyDSbfFtf-tm5VThCN_Os163RPPl4LAtY7k
 
 
-    public static final int NOTIFICATION_ID = 1;
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
     private String masterIP;
     private String masterPort;
     private SharedPreferences prefs;
@@ -94,6 +91,7 @@ public class SymphonyGCMService extends Service {
                         if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
                             String message = extras.getString(SymphonyUtils.MESSAGE_KEY, "");
                             String notificationType = extras.getString(Const.KEY_NOTIFICATIONTYPE);
+
                             if (notificationType == null) {
                                 sendNotification(message);
                             } else {
@@ -102,9 +100,11 @@ public class SymphonyGCMService extends Service {
                                 } else {
                                     String cacsVisitID = extras.getString(Const.KEY_CACSVISITID);
                                     String crmActId = extras.getString(Const.KEY_CRMACTID);
-                                    if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
+                                    String usermobilenumber=extras.getString(Const.KEY_USERMOBILENUMBER);
+                                    String endCustomernumber=extras.getString(Const.KEY_END_CUSTOMER_MOBILENUMBER);
+                                    if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId) && usermobilenumber.equalsIgnoreCase(prefs.getString("usermobilenumber", null))) {
                                         sendVisitNotification(
-                                                message, cacsVisitID, crmActId);
+                                                message, cacsVisitID, crmActId,endCustomernumber);
                                     }
                                 }
                             }
@@ -162,29 +162,11 @@ public class SymphonyGCMService extends Service {
                         .show();
             }
         }
-//        mNotificationManager = (NotificationManager) this
-//                .getSystemService(Context.NOTIFICATION_SERVICE);
-//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-//                new Intent(this, DistributerActivity.class), 0);
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-//                this).setSmallIcon(R.drawable.ic_launcher)
-//                .setContentTitle("e-CRM Notification")
-//                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-//                .setContentText(msg);
-//        mBuilder.setDefaults(Notification.DEFAULT_SOUND);
-//        mBuilder.setContentIntent(contentIntent);
-//        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-//        Log.d(TAG, "Notification sent successfully.");
 
         Random r = new Random();
         int i1 = r.nextInt(1000 - 1) + 1;
-        //**add this line**
-        int requestID = (int) System.currentTimeMillis();
-        if (requestID < 0) {
-            requestID = (-1) * requestID;
-        }
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = createNotification(SymphonyGCMService.this, msg, "", "");
+        Notification notification = createNotification(SymphonyGCMService.this, msg, "", "","");
         mNotificationManager.notify(i1, notification);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss a");
@@ -202,92 +184,26 @@ public class SymphonyGCMService extends Service {
     }
 
 
-    public void sendVisitNotification(String msg, String cacsVisitID, String crmActId) {
+    public void sendVisitNotification(String msg, String cacsVisitID, String crmActId,String endCustomerNumber) {
 
         Random r = new Random();
         int i1 = r.nextInt(1000 - 1) + 1;
-        //**add this line**
-        int requestID = (int) System.currentTimeMillis();
-        if (requestID < 0) {
-            requestID = (-1) * requestID;
-        }
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = createNotification(SymphonyGCMService.this, msg, cacsVisitID, crmActId);
+        Notification notification = createNotification(SymphonyGCMService.this, msg, cacsVisitID, crmActId,endCustomerNumber);
         mNotificationManager.notify(i1, notification);
-
-
-        // insert into database
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss a");
-//        String currentDateandTime = sdf.format(new Date()).replace(" ", "");
-//        currentDateandTime = currentDateandTime.replace(".", "");
-//        ContentValues value = new ContentValues();
-
-//        value.put(DB.NOTIFICATION_MESSAGE, msg + "#&#" + cacsVisitID + "#&#" + crmActId);
-//        value.put(DB.NOTIFICATION_TIMESTAMP, currentDateandTime);
-//        value.put(DB.NOTIFICATION_TYPE, 1);
-//        this.getContentResolver().insert(Uri.parse("content://com.symphony_ecrm.database.DBProvider/addNewNotification"), value);
     }
 
-    Notification createNotification(Context context, String message, String cacsVisitID, String crmActId) {
-//        Notification.Builder notificationBuilder;
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//            notificationBuilder = new Notification.Builder(this)
-//                    .setSmallIcon(R.drawable.ic_launcher)
-//                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
-//                    .setContentText(message);
-//            if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
-//                notificationBuilder.setOngoing(false).setAutoCancel(true);
-//            }
-//        } else {
-//            notificationBuilder = new Notification.Builder(this)
-//                    .setSmallIcon(R.drawable.ic_launcher)
-//                    .setPriority(Notification.PRIORITY_DEFAULT)
-//                    .setCategory(Notification.CATEGORY_MESSAGE)
-//                    .setContentTitle("e-CRM Notification").setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setAutoCancel(true).setOngoing(true)
-//                    .setContentText(message);
-//            if (TextUtils.isEmpty(cacsVisitID) && TextUtils.isEmpty(crmActId)) {
-//                notificationBuilder.setOngoing(false).setAutoCancel(true);
-//            }
-//
-//        }
-//
-//        Intent push = new Intent();
-//        if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
-//            push.putExtra(Const.KEY_CACSVISITID, cacsVisitID);
-//            push.putExtra(Const.KEY_CRMACTID, crmActId);
-//            push.putExtra(Const.KEY_NOTIFICATIONTYPE, Const.TYPE_VISIT);
-//        }
-////        push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-////        push.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-////                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//        push.setClass(context, DistributerActivity.class);
-//
-//        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
-//                push, 0);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            notificationBuilder
-//                    .setContentText(message)
-//                    .setFullScreenIntent(fullScreenPendingIntent, true).setContentIntent(fullScreenPendingIntent);
-//        } else {
-//            notificationBuilder
-//                    .setContentText(message)
-//                    .setContentIntent(fullScreenPendingIntent);
-//        }
-//
-//        return notificationBuilder.build();
+    Notification createNotification(Context context, String message, String cacsVisitID, String crmActId,String endCustomerNumber) {
 
         Intent notificationIntent = new Intent(context, DistributerActivity.class);
         if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
             notificationIntent.putExtra(Const.KEY_CACSVISITID, cacsVisitID);
             notificationIntent.putExtra(Const.KEY_CRMACTID, crmActId);
             notificationIntent.putExtra(Const.KEY_NOTIFICATIONTYPE, Const.TYPE_VISIT);
+            notificationIntent.putExtra(Const.KEY_END_CUSTOMER_MOBILENUMBER, endCustomerNumber);
         }
-//        push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        push.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//        notificationIntent.setClass(context, DistributerActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_launcher)
@@ -295,10 +211,8 @@ public class SymphonyGCMService extends Service {
                 .setContentIntent(intent)
                 .setPriority(5) //private static final PRIORITY_HIGH = 5;
                 .setContentText(message)
-                .setAutoCancel(true)
+                .setAutoCancel(true).setOngoing(true)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
-//        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(0, mBuilder.build());
         return mBuilder.build();
     }
 

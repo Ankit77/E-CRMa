@@ -31,7 +31,7 @@
             <RadioButton
                 android:id="@+id/dialog_nextaction_rbconvertcall"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:checked="false"
                 android:text="Convert Into Visit"
                 android:textColor="@color/button_white"
@@ -42,12 +42,35 @@
                 android:id="@+id/dialog_nextaction_rbpostpone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.13"
                 android:checked="false"
+                android:layout_marginTop="5dp"
                 android:text="Postpone visit"
                 android:textColor="@color/button_white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
+            <RadioButton
+                android:id="@+id/dialog_nextaction_rbphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:checked="false"
+                android:text="Make Call"
+                android:textColor="@color/button_white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/dialog_nextaction_rbSMS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Send SMS"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/button_white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+
         </RadioGroup>
 
         <Button

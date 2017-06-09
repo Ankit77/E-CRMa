@@ -68,6 +68,7 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
     private LocationRequest mLocationRequest;
     private String cacsId;
     private String crmActId;
+    private String endusernumber;
     private HomeFragment homeFragment;
 
     @Override
@@ -116,8 +117,9 @@ public class DistributerActivity extends AppCompatActivity implements Distribute
                     if (notificationtype.equalsIgnoreCase(Const.TYPE_VISIT)) {
                         cacsId = intent.getExtras().get(Const.KEY_CACSVISITID).toString();
                         crmActId = intent.getExtras().get(Const.KEY_CRMACTID).toString();
+                        endusernumber=intent.getExtras().getString(Const.KEY_END_CUSTOMER_MOBILENUMBER,"");
                         if (homeFragment != null) {
-                            homeFragment.showNextActionDateDialog(cacsId, crmActId);
+                            homeFragment.showNextActionDateDialog(cacsId, crmActId,endusernumber);
                         }
                     }
                 }

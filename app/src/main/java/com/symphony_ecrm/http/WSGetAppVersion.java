@@ -70,7 +70,7 @@ public class WSGetAppVersion {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if (tagname.equalsIgnoreCase("ecrm_version")) {
+                        if (tagname.equalsIgnoreCase("e_samparkversion")) {
                             // add employee object to list
                             version = text;
                         }

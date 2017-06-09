@@ -5,10 +5,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +34,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.symphony_ecrm.E_CRM;
+import com.symphony_ecrm.Manifest;
 import com.symphony_ecrm.R;
 import com.symphony_ecrm.distributer.CheckStatus;
 import com.symphony_ecrm.distributer.CustomerListFragment;
@@ -336,7 +341,7 @@ public class HomeFragment extends Fragment {
      * @param cacsvisitId
      * @param crmActID
      */
-    public void showNextActionDateDialog(final String cacsvisitId, final String crmActID) {
+    public void showNextActionDateDialog(final String cacsvisitId, final String crmActID,final String endusernumber) {
 //        // custom dialog
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -380,6 +385,20 @@ public class HomeFragment extends Fragment {
                     } else if (selectedId == R.id.dialog_nextaction_rbpostpone) {
                         showPostposndVisitDailog(cacsvisitId, crmActID);
                         dialog.dismiss();
+                    }else if (selectedId == R.id.dialog_nextaction_rbSMS) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", endusernumber, null)));
+                        dialog.dismiss();
+                    }else if (selectedId == R.id.dialog_nextaction_rbphone) {
+                        try {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:"+endusernumber));
+                            startActivity(callIntent);
+                            dialog.dismiss();
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
                     }
                 } else {
                     Toast.makeText(getActivity(), "Please select option", Toast.LENGTH_LONG).show();
