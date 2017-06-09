@@ -79,8 +79,10 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         if (Util.isNetworkAvailable(SymphonyHome.this)) {
             AsyncCheckVersion asyncCheckVersion = new AsyncCheckVersion();
             asyncCheckVersion.execute();
-        } else {
-            Util.showAlertDialog(SymphonyHome.this, "Please check internet connection");
+        } else
+        {
+            AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
+            asyncRegisterGCM.execute();
         }
 
         if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {

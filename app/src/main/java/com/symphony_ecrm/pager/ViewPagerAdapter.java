@@ -47,6 +47,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 VisitReport fragmenttab4 = new VisitReport();
                 return fragmenttab4;
+            case 4:
+                ReportFragment fragmenttab5 = new ReportFragment();
+                return fragmenttab5;
+
         }
         return null;
     }

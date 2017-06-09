@@ -30,6 +30,7 @@ public class SymphonyReport extends AppCompatActivity {
 //		mAdapter.addPage(new DistributorReport());
         mAdapter.addPage(new NotificationReport());
         mAdapter.addPage(new VisitReport());
+        mAdapter.addPage(new ReportFragment());
 
         viewPager.setAdapter(mAdapter);
 
