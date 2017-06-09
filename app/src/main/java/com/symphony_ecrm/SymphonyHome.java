@@ -4,19 +4,23 @@ package com.symphony_ecrm;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.crittercism.app.Crittercism;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,6 +35,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.symphony_ecrm.distributer.DistributerActivity;
+import com.symphony_ecrm.http.WSGetAppVersion;
 import com.symphony_ecrm.register.RegisterFragment;
 import com.symphony_ecrm.service.CustomerListService;
 import com.symphony_ecrm.service.TimeTickService;
@@ -71,8 +76,12 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         this.getSupportActionBar().setIcon(android.R.color.transparent);
         prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-        AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
-        asyncRegisterGCM.execute();
+        if (Util.isNetworkAvailable(SymphonyHome.this)) {
+            AsyncCheckVersion asyncCheckVersion = new AsyncCheckVersion();
+            asyncCheckVersion.execute();
+        } else {
+            Util.showAlertDialog(SymphonyHome.this, "Please check internet connection");
+        }
 
         if (E_CRM.getsInstance().getSharedPreferences().getBoolean("isregister", false)) {
             //Check time diffrence for Wipe Data
@@ -107,7 +116,6 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
 
         Intent intentLocationService = new Intent(this, SMSService.class);
         intentLocationService.setAction(SMSService.FETCH_LOCATION_INTENT);
-
         startService(intentLocationService);
 
         boolean isRegister = prefs.getBoolean("isregister", false);
@@ -115,7 +123,7 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.homeFragment, new RegisterFragment()).commitAllowingStateLoss();
         } else {
-            Intent intent_custmorList=new Intent(this, CustomerListService.class);
+            Intent intent_custmorList = new Intent(this, CustomerListService.class);
             startService(intent_custmorList);
             Intent intent = new Intent(this, DistributerActivity.class);
             startActivity(intent);
@@ -261,7 +269,6 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
             SymphonyUtils.dismissProgressDialog(progressDialog);
             if (!TextUtils.isEmpty(s)) {
                 if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -278,6 +285,68 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
                 }
             } else {
                 Util.showAlertDialog(SymphonyHome.this, getString(R.string.alert_somethingwrong));
+            }
+        }
+    }
+
+
+    public void showAlertDialog(Context context, final String message) {
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.app_name))
+                .setCancelable(false)
+                .setIcon(R.drawable.ic_launcher)
+                .setMessage(message)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        try {
+                            Intent viewIntent =
+                                    new Intent("android.intent.action.VIEW",
+                                            Uri.parse("https://play.google.com/store/apps/details?id=com.mysosfamily"));
+                            startActivity(viewIntent);
+                        } catch (Exception e) {
+                            Toast.makeText(SymphonyHome.this, "Unable to Connect Try Again...",
+                                    Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(R.drawable.ic_launcher)
+                .show();
+    }
+
+    private class AsyncCheckVersion extends AsyncTask<Void, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = SymphonyUtils.displayProgressDialog(SymphonyHome.this);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String url = "http://61.12.85.74:800/eSampark_GetVersion.asp?NM=track_new&PASS=trak123";
+            WSGetAppVersion wsGetAppVersion = new WSGetAppVersion();
+            return wsGetAppVersion.executePorposeLst(url);
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            SymphonyUtils.dismissProgressDialog(progressDialog);
+            if (!TextUtils.isEmpty(s)) {
+                if (!s.equalsIgnoreCase(SymphonyUtils.getAppVersion(SymphonyHome.this))) {
+                    showAlertDialog(SymphonyHome.this, "E-CRM needs an update. There's a new version of E-CRM available on PlayStore.");
+                } else {
+                    AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
+                    asyncRegisterGCM.execute();
+                }
+            } else {
+                AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
+                asyncRegisterGCM.execute();
             }
         }
     }

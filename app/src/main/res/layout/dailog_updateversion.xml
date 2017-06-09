@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dailog_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Select Action"
+            android:textColor="@color/edit_text_color_blue"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/dialog_nextaction_rgoption"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/dialog_nextaction_rbconvertcall"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:checked="false"
+                android:text="Convert Into Visit"
+                android:textColor="@color/button_white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/dialog_nextaction_rbpostpone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                android:checked="false"
+                android:text="Postpone visit"
+                android:textColor="@color/button_white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/dialog_nextaction_btnSubmit"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_border"
+            android:gravity="center"
+            android:padding="10dp"
+            android:shadowColor="@color/text_white"
+            android:shadowDx="-1"
+            android:shadowDy="1"
+            android:shadowRadius="0.04"
+            android:text="Submit"
+            android:textColor="@color/text_blue"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>
