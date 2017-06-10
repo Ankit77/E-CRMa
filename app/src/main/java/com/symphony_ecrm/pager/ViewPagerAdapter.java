@@ -1,14 +1,14 @@
 package com.symphony_ecrm.pager;
 
-import com.symphony_ecrm.report.CheckStatusReport;
-import com.symphony_ecrm.report.DistributorReport;
-import com.symphony_ecrm.report.NotificationReport;
-import com.symphony_ecrm.report.VisitReport;
-
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.symphony_ecrm.report.CheckStatusReport;
+import com.symphony_ecrm.report.DistributorReport;
+import com.symphony_ecrm.report.NotificationReport;
+import com.symphony_ecrm.report.VisitReport;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -47,9 +47,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 VisitReport fragmenttab4 = new VisitReport();
                 return fragmenttab4;
-            case 4:
-                ReportFragment fragmenttab5 = new ReportFragment();
-                return fragmenttab5;
+
 
         }
         return null;

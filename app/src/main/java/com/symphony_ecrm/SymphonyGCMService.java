@@ -8,9 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -195,12 +193,17 @@ public class SymphonyGCMService extends Service {
 
     Notification createNotification(Context context, String message, String cacsVisitID, String crmActId,String endCustomerNumber) {
 
+        boolean isVisitNofitification=false;
         Intent notificationIntent = new Intent(context, DistributerActivity.class);
         if (!TextUtils.isEmpty(cacsVisitID) && !TextUtils.isEmpty(crmActId)) {
             notificationIntent.putExtra(Const.KEY_CACSVISITID, cacsVisitID);
             notificationIntent.putExtra(Const.KEY_CRMACTID, crmActId);
             notificationIntent.putExtra(Const.KEY_NOTIFICATIONTYPE, Const.TYPE_VISIT);
             notificationIntent.putExtra(Const.KEY_END_CUSTOMER_MOBILENUMBER, endCustomerNumber);
+            isVisitNofitification=true;
+        }else
+        {
+            isVisitNofitification=false;
         }
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -211,7 +214,7 @@ public class SymphonyGCMService extends Service {
                 .setContentIntent(intent)
                 .setPriority(5) //private static final PRIORITY_HIGH = 5;
                 .setContentText(message)
-                .setAutoCancel(true).setOngoing(true)
+                .setAutoCancel(true).setOngoing(isVisitNofitification)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
         return mBuilder.build();
     }

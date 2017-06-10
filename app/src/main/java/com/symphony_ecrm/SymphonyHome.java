@@ -273,7 +273,7 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
             super.onPostExecute(s);
             SymphonyUtils.dismissProgressDialog(progressDialog);
             if (!TextUtils.isEmpty(s)) {
-                if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     googleApiClient = new GoogleApiClient
                             .Builder(SymphonyHome.this)
                             .enableAutoManage(SymphonyHome.this, 34992, SymphonyHome.this)
@@ -340,12 +340,15 @@ public class SymphonyHome extends AppCompatActivity implements GoogleApiClient.C
             super.onPostExecute(s);
             SymphonyUtils.dismissProgressDialog(progressDialog);
             if (!TextUtils.isEmpty(s)) {
-                if (s.equalsIgnoreCase(SymphonyUtils.getAppVersion(SymphonyHome.this))) {
-                    showAlertDialog(SymphonyHome.this, "E-CRM needs an update. There's a new version of E-CRM available on PlayStore.");
-                } else {
+                s = s.substring(1);
+                float serverversion = Float.parseFloat(s);
+                float appVersion = Float.parseFloat(SymphonyUtils.getAppVersion(SymphonyHome.this));
+//                if (appVersion < serverversion) {
+//                    showAlertDialog(SymphonyHome.this, "E-CRM needs an update. There's a new version of E-CRM available on PlayStore.");
+//                } else {
                     AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
                     asyncRegisterGCM.execute();
-                }
+//                }
             } else {
                 AsyncRegisterGCM asyncRegisterGCM = new AsyncRegisterGCM();
                 asyncRegisterGCM.execute();
